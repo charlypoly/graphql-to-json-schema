@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "declaration": true,
+        "outDir": "./dist",
+        "rootDir": "."
+    }
+}
