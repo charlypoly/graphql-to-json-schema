@@ -1,9 +1,9 @@
 import {
     buildSchema,
+    GraphQLSchema,
     graphqlSync,
     introspectionQuery,
-    IntrospectionQuery,
-    GraphQLSchema
+    IntrospectionQuery
 } from 'graphql';
 import { JSONSchema6 } from 'json-schema';
 

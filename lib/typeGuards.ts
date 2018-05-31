@@ -1,19 +1,19 @@
 import {
-    IntrospectionSchema,
-    IntrospectionObjectType,
-    IntrospectionInputObjectType,
-    IntrospectionType,
     IntrospectionEnumType,
-    IntrospectionNonNullTypeRef,
-    IntrospectionTypeRef,
-    IntrospectionNamedTypeRef,
-    IntrospectionListTypeRef,
-    IntrospectionInputValue,
     IntrospectionField,
+    IntrospectionInputObjectType,
+    IntrospectionInputTypeRef,
+    IntrospectionInputValue,
+    IntrospectionListTypeRef,
+    IntrospectionNamedTypeRef,
+    IntrospectionNonNullTypeRef,
+    IntrospectionObjectType,
     IntrospectionOutputTypeRef,
-    IntrospectionInputTypeRef
+    IntrospectionSchema,
+    IntrospectionType,
+    IntrospectionTypeRef
 } from 'graphql';
-import { filter, startsWith, has } from 'lodash';
+import { filter, has, startsWith } from 'lodash';
 
 export const isIntrospectionField = (type: IntrospectionField | IntrospectionInputValue): type is IntrospectionField =>
     has(type, 'args');

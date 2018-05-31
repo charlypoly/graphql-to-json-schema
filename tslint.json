@@ -1,5 +1,6 @@
 {
   "rules": {
+    "ordered-imports": true,
     "align": [
       true,
       "parameters",

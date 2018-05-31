@@ -1,16 +1,16 @@
+import { types } from 'functional-json-schema';
+import { IntrospectionField, IntrospectionInputValue, IntrospectionType } from 'graphql';
+import { _Kind } from 'graphql/language/kinds';
 import { JSONSchema6 } from 'json-schema';
-import { MemoListIterator, reduce, filter, map } from 'lodash';
-import { IntrospectionType, IntrospectionField, IntrospectionInputValue } from 'graphql';
+import { filter, map, MemoListIterator, reduce } from 'lodash';
 import {
-    isIntrospectionObjectType,
-    isNonNullIntrospectionType,
+    isIntrospectionField,
     isIntrospectionInputObjectType,
     isIntrospectionInputValue,
-    isIntrospectionField
+    isIntrospectionObjectType,
+    isNonNullIntrospectionType
 } from './typeGuards';
-import { types } from 'functional-json-schema';
-import { typesMapping, graphqlToJSONType } from './typesMapping';
-import { _Kind } from 'graphql/language/kinds';
+import { graphqlToJSONType, typesMapping } from './typesMapping';
 
 export type JSONSchema6Acc = {
     [k: string]: boolean | JSONSchema6;

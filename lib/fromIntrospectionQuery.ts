@@ -1,8 +1,16 @@
-import { isIntrospectionObjectType, filterDefinitionsTypes } from './typeGuards';
+import { IntrospectionQuery, IntrospectionType } from 'graphql';
 import { JSONSchema6 } from 'json-schema';
-import { partition, includes, reduce } from 'lodash';
-import { IntrospectionType, IntrospectionQuery } from 'graphql';
-import { JSONSchema6Acc, introspectionTypeReducer } from './reducer';
+import { includes, partition, reduce } from 'lodash';
+import { introspectionTypeReducer, JSONSchema6Acc } from './reducer';
+import { filterDefinitionsTypes, isIntrospectionObjectType } from './typeGuards';
+
+export interface GraphQLJSONSchema6 extends JSONSchema6 {
+    properties: {
+        Query: JSONSchema6Acc;
+        Mutation: JSONSchema6Acc;
+    };
+    definitions: JSONSchema6Acc;
+}
 
 export interface FromIntrospectionQueryOptions {
     ignoreInternals?: boolean;

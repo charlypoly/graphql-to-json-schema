@@ -1,7 +1,7 @@
 import * as ajv from 'ajv';
-import { getTodoSchemaIntrospection, todoSchemaAsJsonSchema } from '../test-utils';
-import { fromIntrospectionQuery } from '../lib/fromIntrospectionQuery';
 import { JSONSchema6 } from 'json-schema';
+import { fromIntrospectionQuery } from '../lib/fromIntrospectionQuery';
+import { getTodoSchemaIntrospection, todoSchemaAsJsonSchema } from '../test-utils';
 
 describe('GraphQL to JSON Schema', () => {
 
