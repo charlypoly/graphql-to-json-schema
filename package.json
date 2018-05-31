@@ -6,6 +6,7 @@
   "author": "Charly POLY <cpoly55@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "functional-json-schema": "0.0.2-3",
     "lodash": "^4.17.10"
   },
   "scripts": {

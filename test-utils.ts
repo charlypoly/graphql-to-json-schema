@@ -26,6 +26,7 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
 
         type Query {
             todo(id: String!): Todo
+            todos: [Todo]
         }
 
         type Mutation {
@@ -54,15 +55,32 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
                             type: 'object',
                             properties: {
                                 id: { type: 'string' }
-                            }
+                            },
+                            required: ['id']
                         },
                         return: {
                             $ref: '#/definitions/Todo'
                         }
                     },
-                    required: ['id']
+                    required: []
+                },
+                todos: {
+                    type: 'object',
+                    properties: {
+                        arguments: {
+                            type: 'object',
+                            properties: {},
+                            required: []
+                        },
+                        return: {
+                            type: 'array',
+                            items: { $ref: '#/definitions/Todo' }
+                        }
+                    },
+                    required: []
                 }
-            }
+            },
+            required: []
         },
         Mutation: {
             type: 'object',
@@ -81,7 +99,8 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
                         return: {
                             $ref: '#/definitions/Todo'
                         }
-                    }
+                    },
+                    required: []
                 },
                 create_todo: {
                     type: 'object',
@@ -91,12 +110,13 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
                             properties: {
                                 todo: { $ref: '#/definitions/TodoInputType' }
                             },
-                            required: ['id', 'todo']
+                            required: ['todo']
                         },
                         return: {
                             $ref: '#/definitions/Todo'
                         }
                     },
+                    required: []
                 }
             }
         },
@@ -109,7 +129,15 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
                 name: { type: 'string' },
                 completed: { type: 'boolean' },
             },
-            required: ['name', 'id', 'completed']
+            required: ['id', 'name']
+        },
+        'TodoInputType': {
+            type: 'object',
+            properties: {
+                name: { type: 'string' },
+                completed: { type: 'boolean' },
+            },
+            required: ['name']
         }
     }
 };
