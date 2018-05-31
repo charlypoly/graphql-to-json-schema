@@ -25,8 +25,8 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
         }
 
         type Query {
-            todo(id: String!): Todo
-            todos: [Todo]
+            todo(id: String!): Todo!
+            todos: [Todo!]!
         }
 
         type Mutation {
