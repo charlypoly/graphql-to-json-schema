@@ -34,7 +34,9 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
         
       # TypeScript compile
-      - run: ./node_modules/typescript/bin/tsc > /dev/null
+      - run: |
+        set +e
+        ./node_modules/typescript/bin/tsc > /dev/null
         
       # run tests!
       - run: yarn test
