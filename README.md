@@ -1,4 +1,4 @@
-# GraphQL Schema to JSON Schema (`graphql-2-json-schema`) [![npm version](https://badge.fury.io/js/graphql-2-json-schema.svg)](https://badge.fury.io/js/graphql-2-json-schema)c
+# GraphQL Schema to JSON Schema (`graphql-2-json-schema`) [![npm version](https://badge.fury.io/js/graphql-2-json-schema.svg)](https://badge.fury.io/js/graphql-2-json-schema)
 
 Transform a GraphQL Schema introspection file to a valid JSON Schema.
 
