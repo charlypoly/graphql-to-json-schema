@@ -15,6 +15,10 @@ import {
 } from 'graphql';
 import { filter, has, startsWith } from 'lodash';
 
+///////////////////
+/// Type guards ///
+///////////////////
+
 export const isIntrospectionField = (type: IntrospectionField | IntrospectionInputValue): type is IntrospectionField =>
     has(type, 'args');
 
@@ -47,6 +51,7 @@ export const isNonNullIntrospectionType =
         type.kind === 'NON_NULL'
     );
 
+// Ignore all GraphQL native Scalars, directives, etc...
 export interface FilterDefinitionsTypesOptions { ignoreInternals?: boolean; }
 export const filterDefinitionsTypes =
     (types: IntrospectionType[], opts?: FilterDefinitionsTypesOptions): IntrospectionType[] => {

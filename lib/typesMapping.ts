@@ -26,6 +26,7 @@ export const typesMapping: { [k in GraphQLTypeNames]: JSONSchema6TypeName } = {
     'Float': 'number'
 };
 
+// Convert a GraphQL Type to a valid JSON Schema type
 export type GraphqlToJSONTypeArg = IntrospectionTypeRef | IntrospectionInputTypeRef | IntrospectionOutputTypeRef;
 export const graphqlToJSONType = (k: GraphqlToJSONTypeArg): JSONSchema6 => {
     if (isIntrospectionListTypeRef(k)) {
