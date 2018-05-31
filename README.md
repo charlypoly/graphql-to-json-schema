@@ -1,6 +1,25 @@
-# GraphQL Schema to JSON Schema (`graphql-2-json-schema`) [![npm version](https://badge.fury.io/js/graphql-2-json-schema.svg)](https://badge.fury.io/js/graphql-2-json-schema)
+# GraphQL Schema to JSON Schema (`graphql-2-json-schema`) [![npm version](https://badge.fury.io/js/graphql-2-json-schema.svg)](https://badge.fury.io/js/graphql-2-json-schema)c
 
 Transform a GraphQL Schema introspection file to a valid JSON Schema.
+
+## Usage
+
+```ts
+import {
+    graphqlSync,
+    introspectionQuery,
+    IntrospectionQuery
+} from 'graphql';
+import { fromIntrospectionQuery } from 'graphql-2-json-schema';
+
+// schema is your GraphQL schema.
+
+const introspection = graphqlSync(schema, introspectionQuery).data as IntrospectionQuery;
+
+const result = fromIntrospectionQuery(introspection);
+```
+
+## Example
 
 
 ### Input
