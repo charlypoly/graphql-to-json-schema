@@ -1,6 +1,6 @@
 {
   "name": "graphql-to-json-schema",
-  "version": "0.0.1",
+  "version": "0.1.0-0",
   "main": "dist/index.js",
   "repository": "git@github.com:wittydeveloper/graphql-to-json-schema.git",
   "author": "Charly POLY <cpoly55@gmail.com>",
