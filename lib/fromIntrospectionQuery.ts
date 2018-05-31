@@ -1,9 +1,8 @@
-import { isIntrospectionObjectType, filterDefinitionsTypes } from "./typeGuards";
-import { JSONSchema6 } from "json-schema";
-import { partition, includes, reduce } from "lodash";
-import { IntrospectionType, IntrospectionQuery } from "graphql";
-import { JSONSchema6Acc, introspectionTypeReducer } from "./reducer";
-
+import { isIntrospectionObjectType, filterDefinitionsTypes } from './typeGuards';
+import { JSONSchema6 } from 'json-schema';
+import { partition, includes, reduce } from 'lodash';
+import { IntrospectionType, IntrospectionQuery } from 'graphql';
+import { JSONSchema6Acc, introspectionTypeReducer } from './reducer';
 
 export interface FromIntrospectionQueryOptions {
     ignoreInternals?: boolean;
@@ -14,7 +13,7 @@ export const fromIntrospectionQuery = (
 ): JSONSchema6 => {
     const options = opts || { ignoreInternals: true };
     const { queryType, mutationType } = introspection.__schema;
-    const propertiesTypes = [queryType.name, mutationType.name];
+    const propertiesTypes = [queryType ? queryType.name : 'Query', mutationType ? mutationType.name : 'Mutation'];
     // Query and Mutation are properties, others are definitions
     const [properties, definitions] = partition(
         introspection.__schema.types,
@@ -30,4 +29,4 @@ export const fromIntrospectionQuery = (
             filterDefinitionsTypes(definitions, options), introspectionTypeReducer('definitions'), {}
         )
     };
-}
+};

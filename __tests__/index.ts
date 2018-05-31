@@ -7,15 +7,13 @@ describe('GraphQL to JSON Schema', () => {
 
     const { introspection, schema } = getTodoSchemaIntrospection();
 
-    test('from GraphQLSchema object', () => {
-
-    });
+    xtest('from GraphQLSchema object');
 
     test('from IntrospectionQuery object', () => {
         const result = fromIntrospectionQuery(introspection);
-        expect(result).toMatchObject(<JSONSchema6>todoSchemaAsJsonSchema);
+        expect(result).toMatchObject(<JSONSchema6> todoSchemaAsJsonSchema);
         const validator = new ajv();
         validator.addMetaSchema(require('ajv/lib/refs/json-schema-draft-06.json'));
         expect(validator.validateSchema(result)).toBe(true);
     });
-})
+});
