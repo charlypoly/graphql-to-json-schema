@@ -27,11 +27,15 @@ jobs:
           - v1-dependencies-
 
       - run: yarn install
+      - run: npm i -g typescript
 
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+        
+      # run tests!
+      - run: tsc
         
       # run tests!
       - run: yarn test
