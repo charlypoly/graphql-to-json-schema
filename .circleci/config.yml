@@ -37,7 +37,7 @@ jobs:
       - run: 
           command: |
             set +e
-            ./node_modules/typescript/bin/tsc > /dev/null
+            ./node_modules/typescript/bin/tsc > /dev/null; echo "typescript ftw"
         
       # run tests!
       - run: yarn test
