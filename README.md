@@ -17,6 +17,7 @@ input TodoInputType {
 
 type Query {
     todo(id: String!): Todo
+    todos: [Todo]
 }
 
 type Mutation {
@@ -41,15 +42,32 @@ type Mutation {
                             type: 'object',
                             properties: {
                                 id: { type: 'string' }
-                            }
+                            },
+                            required: ['id']
                         },
                         return: {
                             $ref: '#/definitions/Todo'
                         }
                     },
-                    required: ['id']
+                    required: []
+                },
+                todos: {
+                    type: 'object',
+                    properties: {
+                        arguments: {
+                            type: 'object',
+                            properties: {},
+                            required: []
+                        },
+                        return: {
+                            type: 'array',
+                            items: { $ref: '#/definitions/Todo' }
+                        }
+                    },
+                    required: []
                 }
-            }
+            },
+            required: []
         },
         Mutation: {
             type: 'object',
@@ -68,7 +86,8 @@ type Mutation {
                         return: {
                             $ref: '#/definitions/Todo'
                         }
-                    }
+                    },
+                    required: []
                 },
                 create_todo: {
                     type: 'object',
@@ -78,12 +97,13 @@ type Mutation {
                             properties: {
                                 todo: { $ref: '#/definitions/TodoInputType' }
                             },
-                            required: ['id', 'todo']
+                            required: ['todo']
                         },
                         return: {
                             $ref: '#/definitions/Todo'
                         }
                     },
+                    required: []
                 }
             }
         },
@@ -96,7 +116,15 @@ type Mutation {
                 name: { type: 'string' },
                 completed: { type: 'boolean' },
             },
-            required: ['name', 'id', 'completed']
+            required: ['id', 'name']
+        },
+        'TodoInputType': {
+            type: 'object',
+            properties: {
+                name: { type: 'string' },
+                completed: { type: 'boolean' },
+            },
+            required: ['name']
         }
     }
 }
