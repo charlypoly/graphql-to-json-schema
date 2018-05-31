@@ -15,7 +15,7 @@ import {
     JSONSchema6TypeName
 } from 'json-schema';
 import { includes } from 'lodash';
-import { isIntrospectionListTypeRef } from './typeGuards';
+import { isIntrospectionListTypeRef, isNonNullIntrospectionType } from './typeGuards';
 
 export type GraphQLTypeNames = 'String' | 'Int' | 'Float' | 'Boolean';
 
@@ -33,6 +33,8 @@ export const graphqlToJSONType = (k: GraphqlToJSONTypeArg): JSONSchema6 => {
             type: 'array',
             items: graphqlToJSONType(k.ofType)
         };
+    } else if (isNonNullIntrospectionType(k)) {
+        return graphqlToJSONType(k.ofType);
     } else {
         const name = (k as IntrospectionNamedTypeRef<IntrospectionInputType | IntrospectionOutputType>).name;
         return includes(['OBJECT', 'INPUT_OBJECT'], k.kind) ?

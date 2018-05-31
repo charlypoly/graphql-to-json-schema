@@ -7,6 +7,7 @@ import {
     isIntrospectionField,
     isIntrospectionInputObjectType,
     isIntrospectionInputValue,
+    isIntrospectionListTypeRef,
     isIntrospectionObjectType,
     isNonNullIntrospectionType
 } from './typeGuards';
@@ -20,7 +21,7 @@ type GetRequiredFieldsType = ReadonlyArray<IntrospectionInputValue | Introspecti
 export const getRequiredFields = (fields: GetRequiredFieldsType) => map(
     filter(
         fields,
-        f => isNonNullIntrospectionType(f.type)
+        f => isNonNullIntrospectionType(f.type) && !isIntrospectionListTypeRef(f.type.ofType)
     ),
     f => f.name
 );
@@ -91,7 +92,7 @@ export const introspectionTypeReducer:
                 properties: reduce<IntrospectionFieldReducerItem, JSONSchema6Acc>(
                     curr.fields as IntrospectionFieldReducerItem[], fieldReducer, {}
                 ),
-                required: getRequiredFields(curr.fields)
+                required: type === 'definitions' ? getRequiredFields(curr.fields) : []
             };
         } else if (isIntrospectionInputObjectType(curr)) {
             acc[curr.name] = {
