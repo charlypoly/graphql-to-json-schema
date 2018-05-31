@@ -1,4 +1,6 @@
-# GraphQL Schema to JSON Schema
+# GraphQL Schema to JSON Schema (`graphql-2-json-schema`)
+
+Transform a GraphQL Schema introspection file to a valid JSON Schema.
 
 
 ### Input
