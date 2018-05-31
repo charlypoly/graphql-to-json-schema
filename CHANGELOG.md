@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.1.0-1"></a>
+# [0.1.0-1](https://github.com/wittydeveloper/graphql-to-json-schema/compare/v0.1.0-0...v0.1.0-1) (2018-05-31)
+
+
+### Bug Fixes
+
+* **packaging:** move lib/index to root (.) ([a359398](https://github.com/wittydeveloper/graphql-to-json-schema/commit/a359398))
+
+
+
 <a name="0.1.0-0"></a>
 # 0.1.0-0 (2018-05-31)
 
