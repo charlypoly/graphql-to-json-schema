@@ -1,21 +1,21 @@
 import {
     GraphQLNamedType,
-    KindEnum,
-    IntrospectionOutputTypeRef,
+    IntrospectionInputType,
     IntrospectionInputTypeRef,
     IntrospectionNamedTypeRef,
-    IntrospectionInputType,
     IntrospectionOutputType,
-    IntrospectionTypeRef
+    IntrospectionOutputTypeRef,
+    IntrospectionTypeRef,
+    KindEnum
 } from 'graphql';
-import {
-    JSONSchema6TypeName,
-    JSONSchema6Type,
-    JSONSchema6
-} from 'json-schema';
 import { _Kind } from 'graphql/language/kinds';
-import { isIntrospectionListTypeRef } from './typeGuards';
+import {
+    JSONSchema6,
+    JSONSchema6Type,
+    JSONSchema6TypeName
+} from 'json-schema';
 import { includes } from 'lodash';
+import { isIntrospectionListTypeRef } from './typeGuards';
 
 export type GraphQLTypeNames = 'String' | 'Int' | 'Float' | 'Boolean';
 
