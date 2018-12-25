@@ -38,7 +38,7 @@ export const graphqlToJSONType = (k: GraphqlToJSONTypeArg): JSONSchema6 => {
         return graphqlToJSONType(k.ofType);
     } else {
         const name = (k as IntrospectionNamedTypeRef<IntrospectionInputType | IntrospectionOutputType>).name;
-        return includes(['OBJECT', 'INPUT_OBJECT'], k.kind) ?
+        return includes(['OBJECT', 'INPUT_OBJECT', 'ENUM'], k.kind) ?
             { $ref: `#/definitions/${name}` } :
             // tslint:disable-next-line:no-any
             { type: (typesMapping as any)[name] };
