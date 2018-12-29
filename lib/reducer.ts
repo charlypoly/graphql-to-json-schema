@@ -4,6 +4,7 @@ import { _Kind } from 'graphql/language/kinds';
 import { JSONSchema6 } from 'json-schema';
 import { filter, map, MemoListIterator, reduce } from 'lodash';
 import {
+    isIntrospectionEnumType,
     isIntrospectionField,
     isIntrospectionInputObjectType,
     isIntrospectionInputValue,
@@ -106,6 +107,18 @@ export const introspectionTypeReducer:
                     curr.inputFields as IntrospectionFieldReducerItem[], fieldReducer, {}
                 ),
                 required: getRequiredFields(curr.inputFields)
+            };
+        } else if (isIntrospectionEnumType(curr)) {
+            acc[curr.name] = {
+                type: 'string',
+                anyOf: curr.enumValues.map((item) => {
+                    return {
+                        enum: [
+                            item.name,
+                        ],
+                        title: item.description || item.name,
+                    };
+                }),
             };
         }
         return acc;

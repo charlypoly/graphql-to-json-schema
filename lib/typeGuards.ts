@@ -60,7 +60,8 @@ export const filterDefinitionsTypes =
             types,
             type => (
                 (isIntrospectionObjectType(type) && !!type.fields) ||
-                (isIntrospectionInputObjectType(type) && !!type.inputFields)
+                (isIntrospectionInputObjectType(type) && !!type.inputFields) ||
+                (isIntrospectionEnumType(type) && !!type.enumValues)
             ) &&
                 (!ignoreInternals || (ignoreInternals && !startsWith(type.name, '__')))
         );

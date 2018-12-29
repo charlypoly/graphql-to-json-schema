@@ -33,11 +33,20 @@ type Todo {
     id: String!
     name: String!
     completed: Boolean
+    color: Color
 }
 
 input TodoInputType {
     name: String!
     completed: Boolean
+    color: Color
+}
+
+enum Color {
+  "Red color"
+  RED
+  "Green color"
+  GREEN
 }
 
 type Query {
@@ -140,14 +149,29 @@ type Mutation {
                 id: { type: 'string' },
                 name: { type: 'string' },
                 completed: { type: 'boolean' },
+                color: { $ref: '#/definitions/Color' },
             },
             required: ['id', 'name']
+        },
+        'Color': {
+            type: 'string',
+            anyOf: [
+                {
+                    enum: ['RED'],
+                    title: 'Red color',
+                },
+                {
+                    enum: ['GREEN'],
+                    title: 'Green color',
+                }
+            ]
         },
         'TodoInputType': {
             type: 'object',
             properties: {
                 name: { type: 'string' },
                 completed: { type: 'boolean' },
+                color: { $ref: '#/definitions/Color' },
             },
             required: ['name']
         }
