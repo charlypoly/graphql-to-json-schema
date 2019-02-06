@@ -152,7 +152,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
             required: ['id', 'name']
         },
         'Color': {
-            type: 'string',            
+            type: 'string',
             anyOf: [
                 {
                     enum: ['RED'],

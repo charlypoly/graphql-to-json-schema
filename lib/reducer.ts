@@ -41,11 +41,11 @@ export const propertiesIntrospectionFieldReducer:
                 graphqlToJSONType(curr.type.ofType) :
                 graphqlToJSONType(curr.type);
             acc[curr.name] = {
-                type: 'object',                
+                type: 'object',
                 properties: {
                     'return': returnType,
                     'arguments': {
-                        type: 'object',                        
+                        type: 'object',
                         properties: reduce<IntrospectionFieldReducerItem, JSONSchema6Acc>(
                             curr.args as IntrospectionFieldReducerItem[], propertiesIntrospectionFieldReducer, {}
                         ),
@@ -95,7 +95,7 @@ export const introspectionTypeReducer:
 
         if (isIntrospectionObjectType(curr)) {
             acc[curr.name] = {
-                type: 'object',                
+                type: 'object',
                 properties: reduce<IntrospectionFieldReducerItem, JSONSchema6Acc>(
                     curr.fields as IntrospectionFieldReducerItem[], fieldReducer, {}
                 ),
@@ -104,7 +104,7 @@ export const introspectionTypeReducer:
             };
         } else if (isIntrospectionInputObjectType(curr)) {
             acc[curr.name] = {
-                type: 'object',                
+                type: 'object',
                 properties: reduce<IntrospectionFieldReducerItem, JSONSchema6Acc>(
                     curr.inputFields as IntrospectionFieldReducerItem[], fieldReducer, {}
                 ),
@@ -112,7 +112,7 @@ export const introspectionTypeReducer:
             };
         } else if (isIntrospectionEnumType(curr)) {
             acc[curr.name] = {
-                type: 'string',                
+                type: 'string',
                 anyOf: curr.enumValues.map((item) => {
                     return {
                         enum: [
