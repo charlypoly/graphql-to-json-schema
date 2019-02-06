@@ -15,7 +15,7 @@ import {
 import { graphqlToJSONType, typesMapping } from './typesMapping';
 
 export type JSONSchema6Acc = {
-    [k: string]: boolean | JSONSchema6;
+    [k: string]: JSONSchema6;
 };
 
 // Extract GraphQL no-nullable types
@@ -41,11 +41,11 @@ export const propertiesIntrospectionFieldReducer:
                 graphqlToJSONType(curr.type.ofType) :
                 graphqlToJSONType(curr.type);
             acc[curr.name] = {
-                type: 'object',
+                type: 'object',                
                 properties: {
                     'return': returnType,
                     'arguments': {
-                        type: 'object',
+                        type: 'object',                        
                         properties: reduce<IntrospectionFieldReducerItem, JSONSchema6Acc>(
                             curr.args as IntrospectionFieldReducerItem[], propertiesIntrospectionFieldReducer, {}
                         ),
@@ -60,6 +60,7 @@ export const propertiesIntrospectionFieldReducer:
                 graphqlToJSONType(curr.type);
             acc[curr.name] = returnType;
         }
+        acc[curr.name].description = curr.description || undefined;
         return acc;
     };
 
@@ -80,6 +81,7 @@ export const definitionsIntrospectionFieldReducer:
                 graphqlToJSONType(curr.type);
             acc[curr.name] = returnType;
         }
+        acc[curr.name].description = curr.description || undefined;
         return acc;
     };
 
@@ -93,7 +95,7 @@ export const introspectionTypeReducer:
 
         if (isIntrospectionObjectType(curr)) {
             acc[curr.name] = {
-                type: 'object',
+                type: 'object',                
                 properties: reduce<IntrospectionFieldReducerItem, JSONSchema6Acc>(
                     curr.fields as IntrospectionFieldReducerItem[], fieldReducer, {}
                 ),
@@ -102,7 +104,7 @@ export const introspectionTypeReducer:
             };
         } else if (isIntrospectionInputObjectType(curr)) {
             acc[curr.name] = {
-                type: 'object',
+                type: 'object',                
                 properties: reduce<IntrospectionFieldReducerItem, JSONSchema6Acc>(
                     curr.inputFields as IntrospectionFieldReducerItem[], fieldReducer, {}
                 ),
@@ -110,16 +112,19 @@ export const introspectionTypeReducer:
             };
         } else if (isIntrospectionEnumType(curr)) {
             acc[curr.name] = {
-                type: 'string',
+                type: 'string',                
                 anyOf: curr.enumValues.map((item) => {
                     return {
                         enum: [
                             item.name,
                         ],
                         title: item.description || item.name,
+                        description: item.description || undefined
                     };
                 }),
             };
         }
+
+        acc[curr.name].description = curr.description || undefined;
         return acc;
     };

@@ -31,13 +31,13 @@ export type GraphqlToJSONTypeArg = IntrospectionTypeRef | IntrospectionInputType
 export const graphqlToJSONType = (k: GraphqlToJSONTypeArg): JSONSchema6 => {
     if (isIntrospectionListTypeRef(k)) {
         return {
-            type: 'array',
+            type: 'array',            
             items: graphqlToJSONType(k.ofType)
         };
     } else if (isNonNullIntrospectionType(k)) {
         return graphqlToJSONType(k.ofType);
     } else {
-        const name = (k as IntrospectionNamedTypeRef<IntrospectionInputType | IntrospectionOutputType>).name;
+        const name = (k as IntrospectionNamedTypeRef<IntrospectionInputType | IntrospectionOutputType>).name;        
         return includes(['OBJECT', 'INPUT_OBJECT', 'ENUM'], k.kind) ?
             { $ref: `#/definitions/${name}` } :
             // tslint:disable-next-line:no-any
