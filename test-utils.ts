@@ -13,28 +13,37 @@ type GetTodoSchemaIntrospectionResult = {
 };
 export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult => {
     const schema = buildSchema(`
+        "A ToDo Object"
         type Todo {
-            id: String!
+            "A unique identifier"
+            id: String!            
             name: String!
             completed: Boolean
             color: Color
         }
 
+        """
+        A type that describes ToDoInputType. Its description might not
+        fit within the bounds of 80 width and so you want MULTILINE
+        """
         input TodoInputType {
             name: String!
             completed: Boolean
             color: Color
-        }
+        }        
         
-        enum Color {
-          "Red color"
+        enum Color {           
+          "Red color"          
           RED
           "Green color"
           GREEN
         }
 
         type Query {
-            todo(id: String!): Todo!
+            todo(
+                "todo identifier"
+                id: String!
+            ): Todo!
             todos: [Todo!]!
         }
 
@@ -63,7 +72,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
                         arguments: {
                             type: 'object',
                             properties: {
-                                id: { type: 'string' }
+                                id: { type: 'string', description: "todo identifier" }
                             },
                             required: ['id']
                         },
@@ -133,8 +142,9 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
     definitions: {
         'Todo': {
             type: 'object',
+            description: "A ToDo Object",
             properties: {
-                id: { type: 'string' },
+                id: { type: 'string', description: "A unique identifier" },
                 name: { type: 'string' },
                 completed: { type: 'boolean' },
                 color: { $ref: '#/definitions/Color' },
@@ -147,15 +157,18 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
                 {
                     enum: ['RED'],
                     title: 'Red color',
+                    description: 'Red color'
                 },
                 {
                     enum: ['GREEN'],
                     title: 'Green color',
+                    description: 'Green color'
                 }
             ]
         },
         'TodoInputType': {
             type: 'object',
+            description: 'A type that describes ToDoInputType. Its description might not\nfit within the bounds of 80 width and so you want MULTILINE',
             properties: {
                 name: { type: 'string' },
                 completed: { type: 'boolean' },

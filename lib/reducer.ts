@@ -15,7 +15,7 @@ import {
 import { graphqlToJSONType, typesMapping } from './typesMapping';
 
 export type JSONSchema6Acc = {
-    [k: string]: boolean | JSONSchema6;
+    [k: string]: JSONSchema6;
 };
 
 // Extract GraphQL no-nullable types
@@ -60,6 +60,7 @@ export const propertiesIntrospectionFieldReducer:
                 graphqlToJSONType(curr.type);
             acc[curr.name] = returnType;
         }
+        acc[curr.name].description = curr.description || undefined;
         return acc;
     };
 
@@ -80,6 +81,7 @@ export const definitionsIntrospectionFieldReducer:
                 graphqlToJSONType(curr.type);
             acc[curr.name] = returnType;
         }
+        acc[curr.name].description = curr.description || undefined;
         return acc;
     };
 
@@ -117,9 +119,12 @@ export const introspectionTypeReducer:
                             item.name,
                         ],
                         title: item.description || item.name,
+                        description: item.description || undefined
                     };
                 }),
             };
         }
+
+        acc[curr.name].description = curr.description || undefined;
         return acc;
     };
