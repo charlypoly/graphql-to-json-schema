@@ -31,6 +31,7 @@
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
+    "testURL": "http://localhost/",
     "testRegex": "(/__tests__/([^\\.d]*)|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "moduleFileExtensions": [
       "ts",

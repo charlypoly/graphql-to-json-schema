@@ -13,14 +13,27 @@ type GetTodoSchemaIntrospectionResult = {
 };
 export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult => {
     const schema = buildSchema(`
-        "A ToDo Object"
-        type Todo {
+        "Anything with an ID can be a node"
+        interface Node {
             "A unique identifier"
-            id: String!            
+            id: String!
+        }
+
+        "A custom scalar"
+        scalar DateTime
+
+        "A ToDo Object"
+        type Todo implements Node {
+            "A unique identifier"
+            id: String!
             name: String!
             completed: Boolean
             color: Color
+            addedAt: DateTime
         }
+
+        "Example union"
+        union TodoAndMore = Todo
 
         """
         A type that describes ToDoInputType. Its description might not
@@ -30,10 +43,10 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
             name: String!
             completed: Boolean
             color: Color
-        }        
-        
-        enum Color {           
-          "Red color"          
+        }
+
+        enum Color {
+          "Red color"
           RED
           "Green color"
           GREEN
@@ -72,7 +85,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
                         arguments: {
                             type: 'object',
                             properties: {
-                                id: { type: 'string', description: "todo identifier" }
+                                id: { type: 'string', description: "todo identifier", $ref: '#/definitions/String' }
                             },
                             required: ['id']
                         },
@@ -109,7 +122,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
                         arguments: {
                             type: 'object',
                             properties: {
-                                id: { type: 'string' },
+                                id: { type: 'string', $ref: '#/definitions/String' },
                                 todo: { $ref: '#/definitions/TodoInputType' }
                             },
                             required: ['id', 'todo']
@@ -136,18 +149,47 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
                     },
                     required: []
                 }
-            }
+            },
+            required: []
         },
     },
     definitions: {
+        'Boolean': {
+            type: 'boolean',
+            title: 'Boolean',
+            description: 'The `Boolean` scalar type represents `true` or `false`.'
+        },
+        'String': {
+            type: 'string',
+            title: 'String',
+            description: 'The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.'
+        },
+        'DateTime': {
+            type: 'object',
+            title: 'DateTime',
+            description: 'A custom scalar'
+        },
+        'Node': {
+            type: 'object',
+            description: 'Anything with an ID can be a node',
+            properties: {
+                id: {
+                    type: 'string',
+                    description: 'A unique identifier',
+                    $ref: '#/definitions/String'
+                }
+            },
+            required: ['id']
+        },
         'Todo': {
             type: 'object',
             description: "A ToDo Object",
             properties: {
-                id: { type: 'string', description: "A unique identifier" },
-                name: { type: 'string' },
-                completed: { type: 'boolean' },
+                id: { type: 'string', description: 'A unique identifier', $ref: '#/definitions/String' },
+                name: { type: 'string', $ref: '#/definitions/String' },
+                completed: { type: 'boolean', $ref: '#/definitions/Boolean' },
                 color: { $ref: '#/definitions/Color' },
+                addedAt: { $ref: '#/definitions/DateTime' }
             },
             required: ['id', 'name']
         },
@@ -166,12 +208,19 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
                 }
             ]
         },
+        'TodoAndMore': {
+            type: 'object',
+            description: 'Example union',
+            anyOf: [
+                { $ref: '#/definitions/Todo' }
+            ]
+        },
         'TodoInputType': {
             type: 'object',
             description: 'A type that describes ToDoInputType. Its description might not\nfit within the bounds of 80 width and so you want MULTILINE',
             properties: {
-                name: { type: 'string' },
-                completed: { type: 'boolean' },
+                name: { type: 'string', $ref: '#/definitions/String' },
+                completed: { type: 'boolean', $ref: '#/definitions/Boolean' },
                 color: { $ref: '#/definitions/Color' },
             },
             required: ['name']

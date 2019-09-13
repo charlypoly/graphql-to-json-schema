@@ -4,17 +4,20 @@ import {
     IntrospectionInputObjectType,
     IntrospectionInputTypeRef,
     IntrospectionInputValue,
+    IntrospectionInterfaceType,
     IntrospectionListTypeRef,
     IntrospectionNamedTypeRef,
     IntrospectionNonNullTypeRef,
     IntrospectionObjectType,
     IntrospectionOutputTypeRef,
+    IntrospectionScalarType,
     IntrospectionSchema,
     IntrospectionType,
     IntrospectionTypeRef,
-    IntrospectionScalarType
+    IntrospectionUnionType
 } from 'graphql';
 import { filter, has, startsWith, includes } from 'lodash';
+import { typesMapping } from "./typesMapping";
 
 ///////////////////
 /// Type guards ///
@@ -47,12 +50,21 @@ export const isIntrospectionEnumType = (type: IntrospectionSchema['types'][0]): 
     type.kind === 'ENUM'
 );
 
+export const isIntrospectionScalarType = (type: IntrospectionSchema['types'][0]): type is IntrospectionScalarType => (
+    type.kind === 'SCALAR'
+);
+
+export const isIntrospectionUnionType = (type: IntrospectionSchema['types'][0]): type is IntrospectionUnionType => (
+    type.kind === 'UNION'
+);
+
+export const isIntrospectionInterfaceType = (type: IntrospectionSchema['types'][0]): type is IntrospectionInterfaceType => (
+    type.kind === 'INTERFACE'
+);
+
 export const isNonNullIntrospectionType =
     (type: IntrospectionTypeRef): type is IntrospectionNonNullTypeRef<IntrospectionNamedTypeRef<IntrospectionType>> => (
         type.kind === 'NON_NULL'
-    );
-export const isIntrospectionScalarType = (type: IntrospectionSchema['types'][0]): type is IntrospectionScalarType => (
-        type.kind === 'SCALAR'
     );
 
 export const isIntrospectionDefaultScalarType = (type: IntrospectionSchema['types'][0]): type is IntrospectionScalarType => (
@@ -69,8 +81,10 @@ export const filterDefinitionsTypes =
             type => (
                 (isIntrospectionObjectType(type) && !!type.fields) ||
                 (isIntrospectionInputObjectType(type) && !!type.inputFields) ||
-                (isIntrospectionEnumType(type) && !!type.enumValues) || 
-                (isIntrospectionScalarType(type) && !! type.name)
+                (isIntrospectionEnumType(type) && !!type.enumValues) ||
+                (isIntrospectionScalarType(type) && !! type.name) ||
+                isIntrospectionInterfaceType(type) ||
+                isIntrospectionUnionType(type)
             ) &&
                 (!ignoreInternals || (ignoreInternals && !startsWith(type.name, '__')))
         );

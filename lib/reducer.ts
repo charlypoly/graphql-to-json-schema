@@ -4,15 +4,17 @@ import { _Kind } from 'graphql/language/kinds';
 import { JSONSchema6 } from 'json-schema';
 import { filter, map, MemoListIterator, reduce } from 'lodash';
 import {
+    isIntrospectionDefaultScalarType,
     isIntrospectionEnumType,
     isIntrospectionField,
     isIntrospectionInputObjectType,
     isIntrospectionInputValue,
+    isIntrospectionInterfaceType,
     isIntrospectionListTypeRef,
     isIntrospectionObjectType,
-    isNonNullIntrospectionType,
     isIntrospectionScalarType,
-    isIntrospectionDefaultScalarType
+    isIntrospectionUnionType,
+    isNonNullIntrospectionType,
 } from './typeGuards';
 import { graphqlToJSONType, typesMapping } from './typesMapping';
 
@@ -112,6 +114,15 @@ export const introspectionTypeReducer:
                 ),
                 required: getRequiredFields(curr.inputFields)
             };
+        } else if (isIntrospectionInterfaceType(curr)) {
+            acc[curr.name] = {
+                type: 'object',
+                properties: reduce<IntrospectionFieldReducerItem, JSONSchema6Acc>(
+                    curr.fields as IntrospectionFieldReducerItem[], fieldReducer, {}
+                ),
+                // ignore required for Mutations/Queries
+                required: type === 'definitions' ? getRequiredFields(curr.fields) : []
+            };
         } else if (isIntrospectionEnumType(curr)) {
             acc[curr.name] = {
                 type: 'string',
@@ -125,16 +136,20 @@ export const introspectionTypeReducer:
                     };
                 }),
             };
-        }else if(isIntrospectionDefaultScalarType(curr)){
+        } else if (isIntrospectionDefaultScalarType(curr)) {
             acc[curr.name] = {
                 type: (typesMapping as any)[curr.name],
                 title: curr.name
-            }
-        } 
-        else if (isIntrospectionScalarType(curr)){
+            };
+        } else if (isIntrospectionScalarType(curr)) {
             acc[curr.name] = {
                 type: 'object',
                 title: curr.name
+            };
+        } else if (isIntrospectionUnionType(curr)) {
+            acc[curr.name] = {
+                type: 'object',
+                anyOf: curr.possibleTypes.map((item) => ({ $ref: "#/definitions/" + item.name }))
             };
         }
 

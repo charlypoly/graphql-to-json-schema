@@ -22,7 +22,7 @@ export type GraphQLTypeNames = 'String' | 'Int' | 'Float' | 'Boolean';
 export const typesMapping: { [k in GraphQLTypeNames]: JSONSchema6TypeName } = {
     'Boolean': 'boolean',
     'String': 'string',
-    'Int': 'number',
+    'Int': 'integer',
     'Float': 'number'
 };
 
@@ -43,7 +43,7 @@ export const graphqlToJSONType = (k: GraphqlToJSONTypeArg): JSONSchema6 => {
             { $ref: `#/definitions/${name}` } :
             // tslint:disable-next-line:no-any
             { $ref: `#/definitions/${name}` ,
-              type: (typesMapping as any)[name] 
+              type: (typesMapping as any)[name]
             } :
             { type: (typesMapping as any)[name]}
             ;
