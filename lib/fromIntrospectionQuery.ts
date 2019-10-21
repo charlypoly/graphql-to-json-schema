@@ -23,8 +23,15 @@ export const fromIntrospectionQuery = (
     const options = opts || { ignoreInternals: true };
     const { queryType, mutationType } = introspection.__schema;
 
-    (introspection.__schema.types as any).Mutation =  (introspection.__schema.types as any)[mutationType ? mutationType.name : 'Mutation'];
-    (introspection.__schema.types as any).Query = (introspection.__schema.types as any)[queryType ? queryType.name : 'Query'];
+    if (mutationType) {
+        (introspection.__schema.types as any).Mutation =  (introspection.__schema.types as any)[mutationType.name];
+        (introspection.__schema.types as any).Mutation.name = 'Mutation';
+    }
+
+    if (queryType) {
+        (introspection.__schema.types as any).Query = (introspection.__schema.types as any)[queryType.name];
+        (introspection.__schema.types as any).Query.name = 'Query';
+    }
     //////////////////////////////////////////////////////////////////////
     //// Query and Mutation are properties, custom Types are definitions
     //////////////////////////////////////////////////////////////////////
