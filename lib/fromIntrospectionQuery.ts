@@ -22,13 +22,15 @@ export const fromIntrospectionQuery = (
 ): JSONSchema6 => {
     const options = opts || { ignoreInternals: true };
     const { queryType, mutationType } = introspection.__schema;
-    const propertiesTypes = [queryType ? queryType.name : 'Query', mutationType ? mutationType.name : 'Mutation'];
+
+    (introspection.__schema.types as any).Mutation =  (introspection.__schema.types as any)[mutationType ? mutationType.name : 'Mutation'];
+    (introspection.__schema.types as any).Query = (introspection.__schema.types as any)[queryType ? queryType.name : 'Query'];
     //////////////////////////////////////////////////////////////////////
     //// Query and Mutation are properties, custom Types are definitions
     //////////////////////////////////////////////////////////////////////
     const [properties, definitions] = partition(
         introspection.__schema.types,
-        type => isIntrospectionObjectType(type) && includes(propertiesTypes, type.name)
+        type => isIntrospectionObjectType(type) && includes(['Query', 'Mutation'], type.name)
     );
 
     return {
