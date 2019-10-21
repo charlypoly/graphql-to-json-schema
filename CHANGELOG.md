@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.2-2](https://github.com/wittydeveloper/graphql-to-json-schema/compare/v0.1.2-1...v0.1.2-2) (2019-10-21)
+
+
+### Bug Fixes
+
+* **fromIntrospectionQuery:** properly fetch custom root Mutation/Query types ([a9debf5](https://github.com/wittydeveloper/graphql-to-json-schema/commit/a9debf5))
+
+
+
 ### [0.1.2-1](https://github.com/wittydeveloper/graphql-to-json-schema/compare/v0.1.2-0...v0.1.2-1) (2019-10-21)
 
 
