@@ -24,13 +24,19 @@ export const fromIntrospectionQuery = (
     const { queryType, mutationType } = introspection.__schema;
 
     if (mutationType) {
-        (introspection.__schema.types as any).Mutation =  (introspection.__schema.types as any)[mutationType.name];
-        (introspection.__schema.types as any).Mutation.name = 'Mutation';
+        const rootMutationType = (introspection.__schema.types as any).find( (t: any) => t.name == mutationType.name);
+        if (rootMutationType) {
+            (introspection.__schema.types as any).Mutation =  rootMutationType;
+            (introspection.__schema.types as any).Mutation.name = 'Mutation';
+        }
     }
 
     if (queryType) {
-        (introspection.__schema.types as any).Query = (introspection.__schema.types as any)[queryType.name];
-        (introspection.__schema.types as any).Query.name = 'Query';
+        const rootQueryType = (introspection.__schema.types as any).find( (t: any) => t.name == queryType.name);
+        if (rootQueryType) {
+            (introspection.__schema.types as any).Query = rootQueryType;
+            (introspection.__schema.types as any).Query.name = 'Query';
+        }
     }
     //////////////////////////////////////////////////////////////////////
     //// Query and Mutation are properties, custom Types are definitions
