@@ -11,9 +11,10 @@ import {
     IntrospectionOutputTypeRef,
     IntrospectionSchema,
     IntrospectionType,
-    IntrospectionTypeRef
+    IntrospectionTypeRef,
+    IntrospectionScalarType
 } from 'graphql';
-import { filter, has, startsWith } from 'lodash';
+import { filter, has, startsWith, includes } from 'lodash';
 
 ///////////////////
 /// Type guards ///
@@ -50,6 +51,13 @@ export const isNonNullIntrospectionType =
     (type: IntrospectionTypeRef): type is IntrospectionNonNullTypeRef<IntrospectionNamedTypeRef<IntrospectionType>> => (
         type.kind === 'NON_NULL'
     );
+export const isIntrospectionScalarType = (type: IntrospectionSchema['types'][0]): type is IntrospectionScalarType => (
+        type.kind === 'SCALAR'
+    );
+
+export const isIntrospectionDefaultScalarType = (type: IntrospectionSchema['types'][0]): type is IntrospectionScalarType => (
+        type.kind === 'SCALAR' && includes(['Boolean', 'String', 'Int', 'Float'], type.name)
+    );
 
 // Ignore all GraphQL native Scalars, directives, etc...
 export interface FilterDefinitionsTypesOptions { ignoreInternals?: boolean; }
@@ -61,7 +69,8 @@ export const filterDefinitionsTypes =
             type => (
                 (isIntrospectionObjectType(type) && !!type.fields) ||
                 (isIntrospectionInputObjectType(type) && !!type.inputFields) ||
-                (isIntrospectionEnumType(type) && !!type.enumValues)
+                (isIntrospectionEnumType(type) && !!type.enumValues) || 
+                (isIntrospectionScalarType(type) && !! type.name)
             ) &&
                 (!ignoreInternals || (ignoreInternals && !startsWith(type.name, '__')))
         );
