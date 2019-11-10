@@ -10,7 +10,9 @@ import {
     isIntrospectionInputValue,
     isIntrospectionListTypeRef,
     isIntrospectionObjectType,
-    isNonNullIntrospectionType
+    isNonNullIntrospectionType,
+    isIntrospectionScalarType,
+    isIntrospectionDefaultScalarType
 } from './typeGuards';
 import { graphqlToJSONType, typesMapping } from './typesMapping';
 
@@ -122,6 +124,17 @@ export const introspectionTypeReducer:
                         description: item.description || undefined
                     };
                 }),
+            };
+        }else if(isIntrospectionDefaultScalarType(curr)){
+            acc[curr.name] = {
+                type: (typesMapping as any)[curr.name],
+                title: curr.name
+            }
+        } 
+        else if (isIntrospectionScalarType(curr)){
+            acc[curr.name] = {
+                type: 'object',
+                title: curr.name
             };
         }
 
