@@ -38,8 +38,8 @@ export const graphqlToJSONType = (k: GraphqlToJSONTypeArg): JSONSchema6 => {
         return graphqlToJSONType(k.ofType);
     } else {
         const name = (k as IntrospectionNamedTypeRef<IntrospectionInputType | IntrospectionOutputType>).name;
-        return includes(['OBJECT', 'INPUT_OBJECT', 'ENUM', 'SCALAR'], k.kind) ?
-            includes(['OBJECT', 'INPUT_OBJECT', 'ENUM'], k.kind) ?
+        return includes(['OBJECT', 'INPUT_OBJECT', 'ENUM', 'SCALAR', 'INTERFACE', 'UNION'], k.kind) ?
+            includes(['OBJECT', 'INPUT_OBJECT', 'ENUM', 'INTERFACE', 'UNION'], k.kind) ?
             { $ref: `#/definitions/${name}` } :
             // tslint:disable-next-line:no-any
             { $ref: `#/definitions/${name}` ,

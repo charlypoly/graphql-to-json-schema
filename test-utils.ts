@@ -53,10 +53,18 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
         }
 
         type Query {
+            node(
+                "Identifier"
+                id: String!
+            ): Node!
+
+            todoAndMore: TodoAndMore
+
             todo(
                 "todo identifier"
                 id: String!
             ): Todo!
+
             todos: [Todo!]!
         }
 
@@ -79,6 +87,22 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
         Query: {
             type: 'object',
             properties: {
+                node: {
+                    type: 'object',
+                    properties: {
+                        arguments: {
+                            type: 'object',
+                            properties: {
+                                id: { type: 'string', description: "Identifier", $ref: '#/definitions/String' }
+                            },
+                            required: ['id']
+                        },
+                        return: {
+                            $ref: '#/definitions/Node'
+                        }
+                    },
+                    required: []
+                },
                 todo: {
                     type: 'object',
                     properties: {
@@ -91,6 +115,20 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
                         },
                         return: {
                             $ref: '#/definitions/Todo'
+                        }
+                    },
+                    required: []
+                },
+                todoAndMore: {
+                    type: 'object',
+                    properties: {
+                        arguments: {
+                            type: 'object',
+                            properties: {},
+                            required: []
+                        },
+                        return: {
+                            $ref: '#/definitions/TodoAndMore'
                         }
                     },
                     required: []
