@@ -5,6 +5,9 @@
   "repository": "git@github.com:wittydeveloper/graphql-to-json-schema.git",
   "author": "Charly POLY <cpoly55@gmail.com>",
   "license": "MIT",
+  "engines": {
+    "node": "^8"
+  },
   "dependencies": {
     "functional-json-schema": "0.0.2-3",
     "lodash": "^4.17.10"
