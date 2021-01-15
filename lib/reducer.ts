@@ -36,12 +36,11 @@ export type IntrospectionFieldReducerItem = IntrospectionField | IntrospectionIn
 export const propertiesIntrospectionFieldReducer:
     MemoListIterator<IntrospectionFieldReducerItem, JSONSchema6Acc, ReadonlyArray<IntrospectionFieldReducerItem>> =
     (acc, curr: IntrospectionFieldReducerItem): JSONSchema6Acc => {
-
         if (isIntrospectionField(curr)) {
-
             const returnType = isNonNullIntrospectionType(curr.type) ?
                 graphqlToJSONType(curr.type.ofType) :
                 graphqlToJSONType(curr.type);
+
             acc[curr.name] = {
                 type: 'object',
                 properties: {
@@ -60,8 +59,13 @@ export const propertiesIntrospectionFieldReducer:
             const returnType = isNonNullIntrospectionType(curr.type) ?
                 graphqlToJSONType(curr.type.ofType) :
                 graphqlToJSONType(curr.type);
+
             acc[curr.name] = returnType;
+            if (curr.defaultValue) {
+                acc[curr.name].default = resolveDefaultValue(curr)
+            }
         }
+
         acc[curr.name].description = curr.description || undefined;
         return acc;
     };
@@ -70,22 +74,35 @@ export const propertiesIntrospectionFieldReducer:
 export const definitionsIntrospectionFieldReducer:
     MemoListIterator<IntrospectionFieldReducerItem, JSONSchema6Acc, ReadonlyArray<IntrospectionFieldReducerItem>> =
     (acc, curr: IntrospectionFieldReducerItem): JSONSchema6Acc => {
-
         if (isIntrospectionField(curr)) {
-
             const returnType = isNonNullIntrospectionType(curr.type) ?
                 graphqlToJSONType(curr.type.ofType) :
                 graphqlToJSONType(curr.type);
+
             acc[curr.name] = returnType;
         } else if (isIntrospectionInputValue(curr)) {
             const returnType = isNonNullIntrospectionType(curr.type) ?
                 graphqlToJSONType(curr.type.ofType) :
                 graphqlToJSONType(curr.type);
+
             acc[curr.name] = returnType;
+            if (curr.defaultValue) {
+                acc[curr.name].default = resolveDefaultValue(curr)
+            }
         }
+
         acc[curr.name].description = curr.description || undefined;
         return acc;
     };
+
+// ENUM type defaults will not JSON.parse correctly, so if it is an ENUM then don't
+// try to do that.
+// TODO: fix typing here
+export const resolveDefaultValue = (curr) => {
+    return isIntrospectionEnumType(curr.type) ?
+        curr.defaultValue :
+        JSON.parse(curr.defaultValue);
+}
 
 // Reducer for each type exposed by the GraphQL Schema
 export const introspectionTypeReducer:
@@ -130,7 +147,7 @@ export const introspectionTypeReducer:
                 type: (typesMapping as any)[curr.name],
                 title: curr.name
             }
-        } 
+        }
         else if (isIntrospectionScalarType(curr)){
             acc[curr.name] = {
                 type: 'object',
