@@ -16,10 +16,12 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
         "A ToDo Object"
         type Todo {
             "A unique identifier"
-            id: String!            
+            id: String!
             name: String!
             completed: Boolean
             color: Color
+            "A list containing colors that cannot contain nulls"
+            colors: [Color!]!
         }
 
         """
@@ -30,10 +32,10 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
             name: String!
             completed: Boolean
             color: Color
-        }        
-        
-        enum Color {           
-          "Red color"          
+        }
+
+        enum Color {
+          "Red color"
           RED
           "Green color"
           GREEN
@@ -148,8 +150,13 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
                 name: { type: 'string' },
                 completed: { type: 'boolean' },
                 color: { $ref: '#/definitions/Color' },
+                colors: {
+                    description: "A list containing colors that cannot contain nulls",
+                    type: 'array',
+                    items: { $ref: '#/definitions/Color' }
+                 },
             },
-            required: ['id', 'name']
+            required: ['id', 'name', 'colors']
         },
         'Color': {
             type: 'string',

@@ -20,12 +20,20 @@ export type JSONSchema6Acc = {
     [k: string]: JSONSchema6;
 };
 
-// Extract GraphQL no-nullable types
+
 type GetRequiredFieldsType = ReadonlyArray<IntrospectionInputValue | IntrospectionField>;
+// Extract GraphQL no-nullable types
 export const getRequiredFields = (fields: GetRequiredFieldsType) => map(
     filter(
         fields,
-        f => isNonNullIntrospectionType(f.type) && !isIntrospectionListTypeRef(f.type.ofType)
+        f => {
+            // Not 100% sure if the GraphQL spec requires that NON_NULL should be
+            // the parent of LIST if it's both a NON_NULL and LIST field, but this
+            // should handle either case/implementation
+            return isIntrospectionListTypeRef(f.type) ?
+                isNonNullIntrospectionType(f.type.ofType) :
+                isNonNullIntrospectionType(f.type);
+        }
     ),
     f => f.name
 );
@@ -42,6 +50,7 @@ export const propertiesIntrospectionFieldReducer:
             const returnType = isNonNullIntrospectionType(curr.type) ?
                 graphqlToJSONType(curr.type.ofType) :
                 graphqlToJSONType(curr.type);
+
             acc[curr.name] = {
                 type: 'object',
                 properties: {
@@ -72,7 +81,6 @@ export const definitionsIntrospectionFieldReducer:
     (acc, curr: IntrospectionFieldReducerItem): JSONSchema6Acc => {
 
         if (isIntrospectionField(curr)) {
-
             const returnType = isNonNullIntrospectionType(curr.type) ?
                 graphqlToJSONType(curr.type.ofType) :
                 graphqlToJSONType(curr.type);
@@ -83,6 +91,7 @@ export const definitionsIntrospectionFieldReducer:
                 graphqlToJSONType(curr.type);
             acc[curr.name] = returnType;
         }
+
         acc[curr.name].description = curr.description || undefined;
         return acc;
     };
@@ -125,12 +134,12 @@ export const introspectionTypeReducer:
                     };
                 }),
             };
-        }else if(isIntrospectionDefaultScalarType(curr)){
+        } else if(isIntrospectionDefaultScalarType(curr)){
             acc[curr.name] = {
                 type: (typesMapping as any)[curr.name],
                 title: curr.name
             }
-        } 
+        }
         else if (isIntrospectionScalarType(curr)){
             acc[curr.name] = {
                 type: 'object',
