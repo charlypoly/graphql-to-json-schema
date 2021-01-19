@@ -96,7 +96,7 @@ export const definitionsIntrospectionFieldReducer:
 // ENUM type defaults will not JSON.parse correctly, so if it is an ENUM then don't
 // try to do that.
 // TODO: fix typing here
-export const resolveDefaultValue = (curr) => {
+export const resolveDefaultValue = (curr: any) => {
     return isIntrospectionEnumType(curr.type) ?
         curr.defaultValue :
         JSON.parse(curr.defaultValue);
