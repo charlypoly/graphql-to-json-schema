@@ -18,12 +18,20 @@ export type JSONSchema6Acc = {
     [k: string]: JSONSchema6;
 };
 
-// Extract GraphQL no-nullable types
+
 type GetRequiredFieldsType = ReadonlyArray<IntrospectionInputValue | IntrospectionField>;
+// Extract GraphQL no-nullable types
 export const getRequiredFields = (fields: GetRequiredFieldsType) => map(
     filter(
         fields,
-        f => isNonNullIntrospectionType(f.type) && !isIntrospectionListTypeRef(f.type.ofType)
+        f => {
+            // Not 100% sure if the GraphQL spec requires that NON_NULL should be
+            // the parent of LIST if it's both a NON_NULL and LIST field, but this
+            // should handle either case/implementation
+            return isIntrospectionListTypeRef(f.type) ?
+                isNonNullIntrospectionType(f.type.ofType) :
+                isNonNullIntrospectionType(f.type);
+        }
     ),
     f => f.name
 );
@@ -140,7 +148,7 @@ export const introspectionTypeReducer:
                     };
                 }),
             };
-        }else if(isIntrospectionDefaultScalarType(curr)){
+        } else if(isIntrospectionDefaultScalarType(curr)){
             acc[curr.name] = {
                 type: (typesMapping as any)[curr.name],
                 title: curr.name

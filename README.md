@@ -34,6 +34,7 @@ type Todo {
     name: String!
     completed: Boolean
     color: Color
+    colors: [Color!]!
 }
 
 input TodoInputType {
@@ -154,8 +155,12 @@ type Mutation {
                 name: { type: 'string' },
                 completed: { type: 'boolean' },
                 color: { $ref: '#/definitions/Color' },
+                colors: {
+                    type: 'array',
+                    items: { $ref: '#/definitions/Color' }
+                 },
             },
-            required: ['id', 'name']
+            required: ['id', 'name', 'colors']
         },
         'Color': {
             type: 'string',
