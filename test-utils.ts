@@ -16,10 +16,12 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
         "A ToDo Object"
         type Todo {
             "A unique identifier"
-            id: String!            
+            id: String!
             name: String!
             completed: Boolean
             color: Color
+            "A list containing colors that cannot contain nulls"
+            colors: [Color!]!
         }
 
         """
@@ -29,11 +31,11 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
         input TodoInputType {
             name: String!
             completed: Boolean
-            color: Color
-        }        
-        
-        enum Color {           
-          "Red color"          
+            color: Color=RED
+        }
+
+        enum Color {
+          "Red color"
           RED
           "Green color"
           GREEN
@@ -43,6 +45,7 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
             todo(
                 "todo identifier"
                 id: String!
+                isCompleted: Boolean=false
             ): Todo!
             todos: [Todo!]!
         }
@@ -72,7 +75,8 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
                         arguments: {
                             type: 'object',
                             properties: {
-                                id: { type: 'string', description: "todo identifier" }
+                                id: { type: 'string', description: "todo identifier" },
+                                isCompleted: { type: 'boolean', default: false }
                             },
                             required: ['id']
                         },
@@ -148,8 +152,13 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
                 name: { type: 'string' },
                 completed: { type: 'boolean' },
                 color: { $ref: '#/definitions/Color' },
+                colors: {
+                    description: "A list containing colors that cannot contain nulls",
+                    type: 'array',
+                    items: { $ref: '#/definitions/Color' }
+                 },
             },
-            required: ['id', 'name']
+            required: ['id', 'name', 'colors']
         },
         'Color': {
             type: 'string',
@@ -172,7 +181,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
             properties: {
                 name: { type: 'string' },
                 completed: { type: 'boolean' },
-                color: { $ref: '#/definitions/Color' },
+                color: { default: 'RED', $ref: '#/definitions/Color' },
             },
             required: ['name']
         }
