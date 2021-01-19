@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "functional-json-schema": "0.0.2-3",
-    "lodash": "^4.17.10"
+    "lodash": "^4.17.19"
   },
   "scripts": {
     "test": "jest"
