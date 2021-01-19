@@ -38,8 +38,8 @@ export const graphqlToJSONType = (k: GraphqlToJSONTypeArg): JSONSchema6 => {
             includes(['OBJECT', 'INPUT_OBJECT', 'ENUM'], k.kind) ?
             { $ref: `#/definitions/${name}` } :
             // tslint:disable-next-line:no-any
-            { $ref: `#/definitions/${name}` ,
-              type: (typesMapping as any)[name] 
+            { $ref: `#/definitions/${name}`,
+              type: (typesMapping as any)[name]
             } :
             { type: (typesMapping as any)[name]}
             ;
