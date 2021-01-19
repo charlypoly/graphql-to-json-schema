@@ -12,7 +12,9 @@
     "lodash": "^4.17.20"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "prettier:check": "prettier -c \"**/*.ts\"",
+    "prettier:format": "prettier -w \"**/*.ts\""
   },
   "devDependencies": {
     "@types/ajv": "^1.0.0",
@@ -23,6 +25,7 @@
     "ajv": "^7.0.3",
     "graphql": "^15.4.0",
     "jest": "^26.6.3",
+    "prettier": "^2.2.1",
     "standard-version": "^9.1.0",
     "ts-jest": "^26.4.4",
     "tslint": "^5.20.1",

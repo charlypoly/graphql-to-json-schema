@@ -38,6 +38,11 @@ jobs:
           command: |
             set +e
             ./node_modules/typescript/bin/tsc > /dev/null; echo "typescript ftw"
+
+      # Prettier check
+      - run: 
+          command: |
+            npm run prettier:check
         
       # run tests!
       - run: yarn test
