@@ -6,7 +6,7 @@
   "author": "Charly POLY <cpoly55@gmail.com>",
   "license": "MIT",
   "engines": {
-    "node": "^8"
+    "node": "^14"
   },
   "dependencies": {
     "functional-json-schema": "0.0.2-3",
@@ -34,6 +34,7 @@
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
+    "testEnvironment": "node",
     "testRegex": "(/__tests__/([^\\.d]*)|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "moduleFileExtensions": [
       "ts",
