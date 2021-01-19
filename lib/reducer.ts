@@ -23,18 +23,20 @@ export type JSONSchema6Acc = {
   [k: string]: JSONSchema6
 }
 
-// Extract GraphQL no-nullable types
 type GetRequiredFieldsType = ReadonlyArray<
   IntrospectionInputValue | IntrospectionField
 >
+// Extract GraphQL no-nullable types
 export const getRequiredFields = (fields: GetRequiredFieldsType) =>
   map(
-    filter(
-      fields,
-      (f) =>
-        isNonNullIntrospectionType(f.type) &&
-        !isIntrospectionListTypeRef(f.type.ofType)
-    ),
+    filter(fields, (f) => {
+      // Not 100% sure if the GraphQL spec requires that NON_NULL should be
+      // the parent of LIST if it's both a NON_NULL and LIST field, but this
+      // should handle either case/implementation
+      return isIntrospectionListTypeRef(f.type)
+        ? isNonNullIntrospectionType(f.type.ofType)
+        : isNonNullIntrospectionType(f.type)
+    }),
     (f) => f.name
   )
 
@@ -52,6 +54,7 @@ export const propertiesIntrospectionFieldReducer: MemoListIterator<
     const returnType = isNonNullIntrospectionType(curr.type)
       ? graphqlToJSONType(curr.type.ofType)
       : graphqlToJSONType(curr.type)
+
     acc[curr.name] = {
       type: 'object',
       properties: {
@@ -72,8 +75,13 @@ export const propertiesIntrospectionFieldReducer: MemoListIterator<
     const returnType = isNonNullIntrospectionType(curr.type)
       ? graphqlToJSONType(curr.type.ofType)
       : graphqlToJSONType(curr.type)
+
     acc[curr.name] = returnType
+    if (curr.defaultValue) {
+      acc[curr.name].default = resolveDefaultValue(curr)
+    }
   }
+
   acc[curr.name].description = curr.description || undefined
   return acc
 }
@@ -88,15 +96,30 @@ export const definitionsIntrospectionFieldReducer: MemoListIterator<
     const returnType = isNonNullIntrospectionType(curr.type)
       ? graphqlToJSONType(curr.type.ofType)
       : graphqlToJSONType(curr.type)
+
     acc[curr.name] = returnType
   } else if (isIntrospectionInputValue(curr)) {
     const returnType = isNonNullIntrospectionType(curr.type)
       ? graphqlToJSONType(curr.type.ofType)
       : graphqlToJSONType(curr.type)
+
     acc[curr.name] = returnType
+    if (curr.defaultValue) {
+      acc[curr.name].default = resolveDefaultValue(curr)
+    }
   }
+
   acc[curr.name].description = curr.description || undefined
   return acc
+}
+
+// ENUM type defaults will not JSON.parse correctly, so if it is an ENUM then don't
+// try to do that.
+// TODO: fix typing here
+export const resolveDefaultValue = (curr: any) => {
+  return isIntrospectionEnumType(curr.type)
+    ? curr.defaultValue
+    : JSON.parse(curr.defaultValue)
 }
 
 // Reducer for each type exposed by the GraphQL Schema
