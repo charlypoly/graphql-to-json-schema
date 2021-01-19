@@ -1,17 +1,13 @@
 import {
-    GraphQLNamedType,
     IntrospectionInputType,
     IntrospectionInputTypeRef,
     IntrospectionNamedTypeRef,
     IntrospectionOutputType,
     IntrospectionOutputTypeRef,
     IntrospectionTypeRef,
-    KindEnum
 } from 'graphql';
-import { _Kind } from 'graphql/language/kinds';
 import {
     JSONSchema6,
-    JSONSchema6Type,
     JSONSchema6TypeName
 } from 'json-schema';
 import { includes } from 'lodash';

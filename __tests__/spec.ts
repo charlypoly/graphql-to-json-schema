@@ -1,13 +1,11 @@
-import * as ajv from 'ajv';
+import ajv from 'ajv';
 import { JSONSchema6 } from 'json-schema';
 import { fromIntrospectionQuery } from '../lib/fromIntrospectionQuery';
 import { getTodoSchemaIntrospection, todoSchemaAsJsonSchema } from '../test-utils';
 
 describe('GraphQL to JSON Schema', () => {
 
-    const { introspection, schema } = getTodoSchemaIntrospection();
-
-    xtest('from GraphQLSchema object');
+    const { introspection } = getTodoSchemaIntrospection();
 
     test('from IntrospectionQuery object', () => {
         const result = fromIntrospectionQuery(introspection);

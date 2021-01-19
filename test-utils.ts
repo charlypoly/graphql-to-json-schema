@@ -2,8 +2,8 @@ import {
     buildSchema,
     GraphQLSchema,
     graphqlSync,
-    introspectionQuery,
-    IntrospectionQuery
+    IntrospectionQuery,
+    getIntrospectionQuery
 } from 'graphql';
 import { JSONSchema6 } from 'json-schema';
 
@@ -53,7 +53,7 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
         }
 `);
 
-    const result = graphqlSync(schema, introspectionQuery);
+    const result = graphqlSync(schema, getIntrospectionQuery());
     return {
         introspection: (result.data as IntrospectionQuery),
         schema

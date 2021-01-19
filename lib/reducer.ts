@@ -1,6 +1,4 @@
-import { types } from 'functional-json-schema';
-import { IntrospectionField, IntrospectionInputValue, IntrospectionType } from 'graphql';
-import { _Kind } from 'graphql/language/kinds';
+import { IntrospectionField, IntrospectionInputValue, IntrospectionScalarType, IntrospectionType } from 'graphql';
 import { JSONSchema6 } from 'json-schema';
 import { filter, map, MemoListIterator, reduce } from 'lodash';
 import {
@@ -132,9 +130,9 @@ export const introspectionTypeReducer:
             }
         } 
         else if (isIntrospectionScalarType(curr)){
-            acc[curr.name] = {
+            acc[(curr as IntrospectionScalarType).name] = {
                 type: 'object',
-                title: curr.name
+                title: (curr as IntrospectionScalarType).name
             };
         }
 
