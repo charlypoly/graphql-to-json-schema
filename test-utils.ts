@@ -20,8 +20,10 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
             name: String!
             completed: Boolean
             color: Color
-            "A list containing colors that cannot contain nulls"
-            colors: [Color!]!
+            "A required list containing colors that cannot contain nulls"
+            requiredColors: [Color!]!
+            "A non-required list containing colors that cannot contain nulls"
+            optionalColors: [Color!]
         }
 
         """
@@ -46,6 +48,8 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
                 "todo identifier"
                 id: String!
                 isCompleted: Boolean=false
+                requiredStatuses: [String!]!
+                optionalStatuses: [String!]
             ): Todo!
             todos: [Todo!]!
         }
@@ -77,8 +81,20 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
               properties: {
                 id: { type: 'string', description: 'todo identifier' },
                 isCompleted: { type: 'boolean', default: false },
+                requiredStatuses: {
+                    type: 'array',
+                    items: {
+                        type: 'string',
+                    },
+                },
+                optionalStatuses: {
+                    type: 'array',
+                    items: {
+                        type: 'string',
+                    },
+                },
               },
-              required: ['id'],
+              required: ['id', 'requiredStatuses'],
             },
             return: {
               $ref: '#/definitions/Todo',
@@ -152,13 +168,18 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
         name: { type: 'string' },
         completed: { type: 'boolean' },
         color: { $ref: '#/definitions/Color' },
-        colors: {
-          description: 'A list containing colors that cannot contain nulls',
+        requiredColors: {
+          description: 'A required list containing colors that cannot contain nulls',
+          type: 'array',
+          items: { $ref: '#/definitions/Color' },
+        },
+        optionalColors: {
+          description: 'A non-required list containing colors that cannot contain nulls',
           type: 'array',
           items: { $ref: '#/definitions/Color' },
         },
       },
-      required: ['id', 'name', 'colors'],
+      required: ['id', 'name', 'requiredColors'],
     },
     Color: {
       type: 'string',

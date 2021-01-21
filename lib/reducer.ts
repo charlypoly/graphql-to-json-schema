@@ -28,16 +28,15 @@ type GetRequiredFieldsType = ReadonlyArray<
 >
 // Extract GraphQL no-nullable types
 export const getRequiredFields = (fields: GetRequiredFieldsType) =>
-  map(
-    filter(fields, (f) => {
-      // Not 100% sure if the GraphQL spec requires that NON_NULL should be
-      // the parent of LIST if it's both a NON_NULL and LIST field, but this
-      // should handle either case/implementation
-      return isIntrospectionListTypeRef(f.type)
-        ? isNonNullIntrospectionType(f.type.ofType)
-        : isNonNullIntrospectionType(f.type)
-    }),
-    (f) => f.name
+  reduce(
+    fields,
+    (acc: string[], f) => {
+      if (isNonNullIntrospectionType(f.type)) {
+          acc.push(f.name)
+      }
+      return acc
+    },
+    [],
   )
 
 export type IntrospectionFieldReducerItem =
