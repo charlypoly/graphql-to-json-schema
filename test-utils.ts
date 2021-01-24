@@ -82,16 +82,16 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
                 id: { type: 'string', description: 'todo identifier' },
                 isCompleted: { type: 'boolean', default: false },
                 requiredStatuses: {
-                    type: 'array',
-                    items: {
-                        type: 'string',
-                    },
+                  type: 'array',
+                  items: {
+                    type: 'string',
+                  },
                 },
                 optionalStatuses: {
-                    type: 'array',
-                    items: {
-                        type: 'string',
-                    },
+                  type: 'array',
+                  items: {
+                    type: 'string',
+                  },
                 },
               },
               required: ['id', 'requiredStatuses'],
@@ -169,12 +169,14 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
         completed: { type: 'boolean' },
         color: { $ref: '#/definitions/Color' },
         requiredColors: {
-          description: 'A required list containing colors that cannot contain nulls',
+          description:
+            'A required list containing colors that cannot contain nulls',
           type: 'array',
           items: { $ref: '#/definitions/Color' },
         },
         optionalColors: {
-          description: 'A non-required list containing colors that cannot contain nulls',
+          description:
+            'A non-required list containing colors that cannot contain nulls',
           type: 'array',
           items: { $ref: '#/definitions/Color' },
         },

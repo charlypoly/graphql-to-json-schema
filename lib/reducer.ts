@@ -32,11 +32,11 @@ export const getRequiredFields = (fields: GetRequiredFieldsType) =>
     fields,
     (acc: string[], f) => {
       if (isNonNullIntrospectionType(f.type)) {
-          acc.push(f.name)
+        acc.push(f.name)
       }
       return acc
     },
-    [],
+    []
   )
 
 export type IntrospectionFieldReducerItem =
