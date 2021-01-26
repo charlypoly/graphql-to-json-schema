@@ -24,6 +24,12 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
             requiredColors: [Color!]!
             "A non-required list containing colors that cannot contain nulls"
             optionalColors: [Color!]
+            fieldWithOptionalArgument(
+              optionalFilter: [String!]
+            ): [String!]
+            fieldWithRequiredArgument(
+              requiredFilter: [String!]!
+            ): [String!]
         }
 
         """
@@ -61,6 +67,7 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
 `)
 
   const result = graphqlSync(schema, getIntrospectionQuery())
+
   return {
     introspection: result.data as IntrospectionQuery,
     schema,
@@ -118,6 +125,8 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
           required: [],
         },
       },
+      // Inappropriate for individual queries to be required, despite possibly having
+      // NON_NULL return types
       required: [],
     },
     Mutation: {
@@ -157,6 +166,9 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
           required: [],
         },
       },
+      // Inappropriate for individual mutations to be required, despite possibly having
+      // NON_NULL return types
+      required: [],
     },
   },
   definitions: {
@@ -164,22 +176,104 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
       type: 'object',
       description: 'A ToDo Object',
       properties: {
-        id: { type: 'string', description: 'A unique identifier' },
-        name: { type: 'string' },
-        completed: { type: 'boolean' },
-        color: { $ref: '#/definitions/Color' },
+        id: {
+          description: 'A unique identifier',
+          type: 'object',
+          properties: {
+            return: { type: 'string' },
+            arguments: { type: 'object', properties: {}, required: [] }
+          },
+          required: [],
+        },
+        name: {
+          type: 'object',
+          properties: {
+            return: { type: 'string' },
+            arguments: { type: 'object', properties: {}, required: [] }
+          },
+          required: [],
+        },
+        completed: {
+          type: 'object',
+          properties: {
+            return: { type: 'boolean' },
+            arguments: { type: 'object', properties: {}, required: [] }
+          },
+          required: [],
+        },
+        color: {
+          type: 'object',
+          properties: {
+            return: { $ref: '#/definitions/Color' },
+            arguments: { type: 'object', properties: {}, required: [] },
+          },
+          required: [],
+        },
         requiredColors: {
-          description:
-            'A required list containing colors that cannot contain nulls',
-          type: 'array',
-          items: { $ref: '#/definitions/Color' },
+          description: 'A required list containing colors that cannot contain nulls',
+          type: 'object',
+          properties: {
+            return: {
+              type: 'array',
+              items: { $ref: '#/definitions/Color' },
+            },
+            arguments: { type: 'object', properties: {}, required: [] }
+          },
+          required: [],
         },
         optionalColors: {
           description:
             'A non-required list containing colors that cannot contain nulls',
-          type: 'array',
-          items: { $ref: '#/definitions/Color' },
+          type: 'object',
+          properties: {
+            return: {
+              type: 'array',
+              items: { $ref: '#/definitions/Color' },
+            },
+            arguments: { type: 'object', properties: {}, required: [] },
+          },
+          required: [],
         },
+        fieldWithOptionalArgument: {
+          type: 'object',
+          properties: {
+            return: {
+              type: 'array',
+              items: { type: 'string' },
+            },
+            arguments: {
+              type: 'object',
+              properties: {
+                optionalFilter: {
+                  type: 'array',
+                  items: { type: 'string' },
+                }
+              },
+              required: [],
+            },
+          },
+          required: [],
+        },
+        fieldWithRequiredArgument: {
+          type: 'object',
+          properties: {
+            return: {
+              type: 'array',
+              items: { type: 'string' },
+            },
+            arguments: {
+              type: 'object',
+              properties: {
+                requiredFilter: {
+                  type: 'array',
+                  items: { type: 'string' },
+                }
+              },
+              required: ['requiredFilter'],
+            },
+          },
+          required: [],
+        }
       },
       required: ['id', 'name', 'requiredColors'],
     },

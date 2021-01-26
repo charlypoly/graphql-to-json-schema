@@ -14,7 +14,8 @@
   "scripts": {
     "test": "jest",
     "prettier:check": "prettier -c \"**/*.ts\"",
-    "prettier:format": "prettier -w \"**/*.ts\""
+    "prettier:format": "prettier -w \"**/*.ts\"",
+    "generateReadmeExample": "npx ts-node doc-exampleGenerator.ts"
   },
   "devDependencies": {
     "@types/ajv": "^1.0.0",

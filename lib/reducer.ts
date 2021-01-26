@@ -43,8 +43,8 @@ export type IntrospectionFieldReducerItem =
   | IntrospectionField
   | IntrospectionInputValue
 
-// reducer for a queries/mutations
-export const propertiesIntrospectionFieldReducer: MemoListIterator<
+// reducer for a types and inputs
+export const introspectionFieldReducer: MemoListIterator<
   IntrospectionFieldReducerItem,
   JSONSchema6Acc,
   ReadonlyArray<IntrospectionFieldReducerItem>
@@ -62,7 +62,7 @@ export const propertiesIntrospectionFieldReducer: MemoListIterator<
           type: 'object',
           properties: reduce<IntrospectionFieldReducerItem, JSONSchema6Acc>(
             curr.args as IntrospectionFieldReducerItem[],
-            propertiesIntrospectionFieldReducer,
+            introspectionFieldReducer,
             {}
           ),
           required: getRequiredFields(curr.args),
@@ -70,33 +70,6 @@ export const propertiesIntrospectionFieldReducer: MemoListIterator<
       },
       required: [],
     }
-  } else if (isIntrospectionInputValue(curr)) {
-    const returnType = isNonNullIntrospectionType(curr.type)
-      ? graphqlToJSONType(curr.type.ofType)
-      : graphqlToJSONType(curr.type)
-
-    acc[curr.name] = returnType
-    if (curr.defaultValue) {
-      acc[curr.name].default = resolveDefaultValue(curr)
-    }
-  }
-
-  acc[curr.name].description = curr.description || undefined
-  return acc
-}
-
-// reducer for a custom types
-export const definitionsIntrospectionFieldReducer: MemoListIterator<
-  IntrospectionFieldReducerItem,
-  JSONSchema6Acc,
-  ReadonlyArray<IntrospectionFieldReducerItem>
-> = (acc, curr: IntrospectionFieldReducerItem): JSONSchema6Acc => {
-  if (isIntrospectionField(curr)) {
-    const returnType = isNonNullIntrospectionType(curr.type)
-      ? graphqlToJSONType(curr.type.ofType)
-      : graphqlToJSONType(curr.type)
-
-    acc[curr.name] = returnType
   } else if (isIntrospectionInputValue(curr)) {
     const returnType = isNonNullIntrospectionType(curr.type)
       ? graphqlToJSONType(curr.type.ofType)
@@ -129,28 +102,27 @@ export const introspectionTypeReducer: (
   JSONSchema6Acc,
   IntrospectionType[]
 > = (type) => (acc, curr: IntrospectionType): JSONSchema6Acc => {
-  const fieldReducer =
-    type === 'definitions'
-      ? definitionsIntrospectionFieldReducer
-      : propertiesIntrospectionFieldReducer
+  const isQueriesOrMutations = type === 'properties'
 
   if (isIntrospectionObjectType(curr)) {
     acc[curr.name] = {
       type: 'object',
       properties: reduce<IntrospectionFieldReducerItem, JSONSchema6Acc>(
         curr.fields as IntrospectionFieldReducerItem[],
-        fieldReducer,
+        introspectionFieldReducer,
         {}
       ),
-      // ignore required for Mutations/Queries
-      required: type === 'definitions' ? getRequiredFields(curr.fields) : [],
+      // Query and Mutation are special Types, whose fields represent the individual
+      // queries and mutations. None of them ought to not be considered required, even if
+      // their return value is a NON_NULL one.
+      required: isQueriesOrMutations ? [] : getRequiredFields(curr.fields),
     }
   } else if (isIntrospectionInputObjectType(curr)) {
     acc[curr.name] = {
       type: 'object',
       properties: reduce<IntrospectionFieldReducerItem, JSONSchema6Acc>(
         curr.inputFields as IntrospectionFieldReducerItem[],
-        fieldReducer,
+        introspectionFieldReducer,
         {}
       ),
       required: getRequiredFields(curr.inputFields),
