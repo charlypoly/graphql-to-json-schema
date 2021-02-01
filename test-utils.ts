@@ -181,7 +181,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
           type: 'object',
           properties: {
             return: { type: 'string' },
-            arguments: { type: 'object', properties: {}, required: [] }
+            arguments: { type: 'object', properties: {}, required: [] },
           },
           required: [],
         },
@@ -189,7 +189,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
           type: 'object',
           properties: {
             return: { type: 'string' },
-            arguments: { type: 'object', properties: {}, required: [] }
+            arguments: { type: 'object', properties: {}, required: [] },
           },
           required: [],
         },
@@ -197,7 +197,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
           type: 'object',
           properties: {
             return: { type: 'boolean' },
-            arguments: { type: 'object', properties: {}, required: [] }
+            arguments: { type: 'object', properties: {}, required: [] },
           },
           required: [],
         },
@@ -210,14 +210,15 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
           required: [],
         },
         requiredColors: {
-          description: 'A required list containing colors that cannot contain nulls',
+          description:
+            'A required list containing colors that cannot contain nulls',
           type: 'object',
           properties: {
             return: {
               type: 'array',
               items: { $ref: '#/definitions/Color' },
             },
-            arguments: { type: 'object', properties: {}, required: [] }
+            arguments: { type: 'object', properties: {}, required: [] },
           },
           required: [],
         },
@@ -247,7 +248,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
                 optionalFilter: {
                   type: 'array',
                   items: { type: 'string' },
-                }
+                },
               },
               required: [],
             },
@@ -267,13 +268,13 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
                 requiredFilter: {
                   type: 'array',
                   items: { type: 'string' },
-                }
+                },
               },
               required: ['requiredFilter'],
             },
           },
           required: [],
-        }
+        },
       },
       required: ['id', 'name', 'requiredColors'],
     },

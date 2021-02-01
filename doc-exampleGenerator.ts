@@ -50,14 +50,18 @@ const readmeSDL: string = `
 `
 
 const readmeSchema = buildSchema(readmeSDL)
-const introspectionQueryJSON = graphqlSync(readmeSchema, getIntrospectionQuery()).data as IntrospectionQuery
+const introspectionQueryJSON = graphqlSync(
+  readmeSchema,
+  getIntrospectionQuery()
+).data as IntrospectionQuery
 const readmeResult = fromIntrospectionQuery(introspectionQueryJSON)
 
 // Get rid of undefined values this way
 const cleanedUpReadmeResult = JSON.parse(JSON.stringify(readmeResult))
 
 const startsWithTestGenerator = (stringToTest: string) => {
-  return (stringToLookFor: string) => stringToTest.startsWith(`${stringToLookFor}:`)
+  return (stringToLookFor: string) =>
+    stringToTest.startsWith(`${stringToLookFor}:`)
 }
 
 const keyComparator = (a: string, b: string) => {
@@ -92,7 +96,7 @@ const output = `
 ### Output
 
 \`\`\`js
-${inspect(cleanedUpReadmeResult, {depth: null, sorted: keyComparator})}
+${inspect(cleanedUpReadmeResult, { depth: null, sorted: keyComparator })}
 \`\`\`
 `
 
@@ -103,9 +107,8 @@ ${output}
 `)
 
 if (process.platform === 'darwin') {
-  const proc = spawn('pbcopy');
+  const proc = spawn('pbcopy')
   proc.stdin.write(output)
   proc.stdin.end()
   console.log('OUTPUT COPIED TO YOUR CLIPBOARD!!!\n')
 }
-
