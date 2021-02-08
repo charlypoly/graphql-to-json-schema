@@ -1,12 +1,23 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "noImplicitAny": true,
-        "removeComments": true,
-        "skipLibCheck": true,
-        "strict": true,
-        "declaration": true,
-        "outDir": "./dist",
-        "rootDir": "."
-    }
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Node 8",
+
+  "compilerOptions": {
+    // https://www.typescriptlang.org/tsconfig#target
+    // ES6/ES2015 features are supported by Node v8
+    "target": "ES2015",
+    "lib": ["ES2015"],
+
+    "module": "commonjs",
+    "strict": true,
+    "declaration": true,
+    "removeComments": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "outDir": "./dist",
+    "rootDir": "."
+  },
 }
