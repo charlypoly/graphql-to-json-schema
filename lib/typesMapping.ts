@@ -27,23 +27,52 @@ export type GraphqlToJSONTypeArg =
   | IntrospectionTypeRef
   | IntrospectionInputTypeRef
   | IntrospectionOutputTypeRef
-export const graphqlToJSONType = (k: GraphqlToJSONTypeArg): JSONSchema6 => {
+
+export type GraphqlToJSONTypeOptions = {
+  isArray?: boolean
+  isNonNull?: boolean
+}
+
+export const graphqlToJSONType = (k: GraphqlToJSONTypeArg, options: GraphqlToJSONTypeOptions = {}): JSONSchema6 => {
   if (isIntrospectionListTypeRef(k)) {
     return {
       type: 'array',
-      items: graphqlToJSONType(k.ofType),
+      items: graphqlToJSONType(k.ofType, { ...options, isArray: true }),
     }
   } else if (isNonNullIntrospectionType(k)) {
-    return graphqlToJSONType(k.ofType)
+    return graphqlToJSONType(k.ofType, { ...options, isNonNull: true })
   } else {
     const name = (k as IntrospectionNamedTypeRef<
       IntrospectionInputType | IntrospectionOutputType
     >).name
-    return includes(['OBJECT', 'INPUT_OBJECT', 'ENUM', 'SCALAR'], k.kind)
-      ? includes(['OBJECT', 'INPUT_OBJECT', 'ENUM'], k.kind)
-        ? { $ref: `#/definitions/${name}` }
-        : // tslint:disable-next-line:no-any
-          { $ref: `#/definitions/${name}`, type: (typesMapping as any)[name] }
-      : { type: (typesMapping as any)[name] }
+
+    const {
+      isArray,
+      isNonNull,
+    } = options
+
+    const jsonType = {} as JSONSchema6
+
+    if (includes(['OBJECT', 'INPUT_OBJECT', 'ENUM', 'SCALAR'], k.kind)) {
+      jsonType.$ref = `#/definitions/${name}`
+      // https://tools.ietf.org/html/draft-wright-json-schema-01#section-8
+      // All other properties in a "$ref" object MUST be ignored.
+      // if (includes(['SCALAR'], k.kind)) {
+      //   jsonType.type = (typesMapping as any)[name]
+      // }
+    } else {
+      jsonType.type = (typesMapping as any)[name]
+    }
+
+    if (isArray && !isNonNull) {
+      return {
+        anyOf: [
+          jsonType,
+          { type: 'null' }
+        ]
+      }
+    }
+
+    return jsonType
   }
 }

@@ -20,16 +20,29 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
             name: String!
             completed: Boolean
             color: Color
+
             "A required list containing colors that cannot contain nulls"
             requiredColors: [Color!]!
+
             "A non-required list containing colors that cannot contain nulls"
             optionalColors: [Color!]
+
             fieldWithOptionalArgument(
               optionalFilter: [String!]
             ): [String!]
+
             fieldWithRequiredArgument(
               requiredFilter: [String!]!
             ): [String!]
+
+            nullableFieldThatReturnsListOfNonNullStrings(
+              nonRequiredArgumentOfNullableStrings: [String]
+              nonRequiredArgumentOfNonNullableStrings: [String!]
+              requiredArgumentOfNullableStrings: [String]!
+              requiredArgumentOfNonNullableStrings: [String!]!
+            ): [String!]
+
+            nullableFieldThatReturnsListOfNullableStrings: [String]
         }
 
         """
@@ -54,8 +67,11 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
                 "todo identifier"
                 id: String!
                 isCompleted: Boolean=false
-                requiredStatuses: [String!]!
-                optionalStatuses: [String!]
+                requiredNonNullStrings: [String!]!
+                optionalNonNullStrings: [String!]
+
+                requiredNullableStrings: [String]!
+                optionalNullableStrings: [String]
             ): Todo!
             todos: [Todo!]!
         }
@@ -86,22 +102,38 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
             arguments: {
               type: 'object',
               properties: {
-                id: { type: 'string', description: 'todo identifier' },
-                isCompleted: { type: 'boolean', default: false },
-                requiredStatuses: {
+                id: { $ref: '#/definitions/String', description: 'todo identifier' },
+                isCompleted: { $ref: '#/definitions/Boolean', default: false },
+                requiredNonNullStrings: {
+                  type: 'array',
+                  items: { $ref: '#/definitions/String' },
+                },
+                optionalNonNullStrings: {
                   type: 'array',
                   items: {
-                    type: 'string',
+                    $ref: '#/definitions/String',
                   },
                 },
-                optionalStatuses: {
+                requiredNullableStrings: {
                   type: 'array',
                   items: {
-                    type: 'string',
+                    anyOf: [
+                      { $ref: '#/definitions/String' },
+                      { type: 'null' }
+                    ],
+                  },
+                },
+                optionalNullableStrings: {
+                  type: 'array',
+                  items: {
+                    anyOf: [
+                      { $ref: '#/definitions/String' },
+                      { type: 'null' }
+                    ],
                   },
                 },
               },
-              required: ['id', 'requiredStatuses'],
+              required: ['id', 'requiredNonNullStrings', 'requiredNullableStrings'],
             },
             return: {
               $ref: '#/definitions/Todo',
@@ -138,7 +170,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
             arguments: {
               type: 'object',
               properties: {
-                id: { type: 'string' },
+                id: { $ref: '#/definitions/String' },
                 todo: { $ref: '#/definitions/TodoInputType' },
               },
               required: ['id', 'todo'],
@@ -180,7 +212,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
           description: 'A unique identifier',
           type: 'object',
           properties: {
-            return: { type: 'string' },
+            return: { $ref: '#/definitions/String' },
             arguments: { type: 'object', properties: {}, required: [] },
           },
           required: [],
@@ -188,7 +220,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
         name: {
           type: 'object',
           properties: {
-            return: { type: 'string' },
+            return: { $ref: '#/definitions/String' },
             arguments: { type: 'object', properties: {}, required: [] },
           },
           required: [],
@@ -196,7 +228,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
         completed: {
           type: 'object',
           properties: {
-            return: { type: 'boolean' },
+            return: { $ref: '#/definitions/Boolean' },
             arguments: { type: 'object', properties: {}, required: [] },
           },
           required: [],
@@ -240,14 +272,14 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
           properties: {
             return: {
               type: 'array',
-              items: { type: 'string' },
+              items: { $ref: '#/definitions/String' },
             },
             arguments: {
               type: 'object',
               properties: {
                 optionalFilter: {
                   type: 'array',
-                  items: { type: 'string' },
+                  items: { $ref: '#/definitions/String' },
                 },
               },
               required: [],
@@ -260,14 +292,14 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
           properties: {
             return: {
               type: 'array',
-              items: { type: 'string' },
+              items: { $ref: '#/definitions/String' },
             },
             arguments: {
               type: 'object',
               properties: {
                 requiredFilter: {
                   type: 'array',
-                  items: { type: 'string' },
+                  items: { $ref: '#/definitions/String' },
                 },
               },
               required: ['requiredFilter'],
@@ -275,10 +307,72 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
           },
           required: [],
         },
+        nullableFieldThatReturnsListOfNonNullStrings: {
+          type: 'object',
+          properties: {
+            return: {
+              type: 'array',
+              items: { $ref: '#/definitions/String' },
+            },
+            arguments: {
+              type: 'object',
+              properties: {
+                nonRequiredArgumentOfNullableStrings: {
+                  type: 'array',
+                  items: {
+                    anyOf: [
+                      { $ref: '#/definitions/String' },
+                      { type: 'null' },
+                    ],
+                  },
+                },
+                nonRequiredArgumentOfNonNullableStrings: {
+                  type: 'array',
+                  items: { $ref: '#/definitions/String' },
+                },
+                requiredArgumentOfNullableStrings: {
+                  type: 'array',
+                  items: {
+                    anyOf: [
+                      { $ref: '#/definitions/String' },
+                      { type: 'null' },
+                    ],
+                  },
+                },
+                requiredArgumentOfNonNullableStrings: {
+                  type: 'array',
+                  items: { $ref: '#/definitions/String' },
+                },
+              },
+              required: [
+                'requiredArgumentOfNullableStrings',
+                'requiredArgumentOfNonNullableStrings',
+              ],
+            },
+          },
+          required: [],
+        },
+        nullableFieldThatReturnsListOfNullableStrings: {
+          type: 'object',
+          properties: {
+            return: {
+              type: 'array',
+              items: {
+                anyOf: [
+                  { $ref: '#/definitions/String' },
+                  { type: 'null' },
+                ],
+              },
+            },
+            arguments: { type: 'object', properties: {}, required: [] },
+          },
+          required: [],
+        },
       },
       required: ['id', 'name', 'requiredColors'],
     },
     Color: {
+      // Yes, ENUM types should be the JSON built-in "string" type
       type: 'string',
       anyOf: [
         {
@@ -298,8 +392,8 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
       description:
         'A type that describes ToDoInputType. Its description might not\nfit within the bounds of 80 width and so you want MULTILINE',
       properties: {
-        name: { type: 'string' },
-        completed: { type: 'boolean' },
+        name: { $ref: '#/definitions/String' },
+        completed: { $ref: '#/definitions/Boolean' },
         color: { default: 'RED', $ref: '#/definitions/Color' },
       },
       required: ['name'],

@@ -75,10 +75,10 @@ export const introspectionFieldReducer: MemoListIterator<
       ? graphqlToJSONType(curr.type.ofType)
       : graphqlToJSONType(curr.type)
 
-    acc[curr.name] = returnType
     if (curr.defaultValue) {
-      acc[curr.name].default = resolveDefaultValue(curr)
+      returnType.default = resolveDefaultValue(curr)
     }
+    acc[curr.name] = returnType
   }
 
   acc[curr.name].description = curr.description || undefined
