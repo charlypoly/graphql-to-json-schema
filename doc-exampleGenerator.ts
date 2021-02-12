@@ -18,8 +18,11 @@ const readmeSDL: string = `
       name: String!
       completed: Boolean
       color: Color
+
       "A field that requires an argument"
-      colors(filter: [Color!]!): [Color!]!
+      colors(
+        filter: [Color!]!
+      ): [Color!]!
   }
 
   input TodoInputType {
@@ -29,24 +32,44 @@ const readmeSDL: string = `
   }
 
   enum Color {
-    "Red color"
-    RED
-    "Green color"
-    GREEN
+      "Red color"
+      RED
+      "Green color"
+      GREEN
   }
 
   type Query {
       "A Query with 1 required argument and 1 optional argument"
-      todo(id: String!, isCompleted: Boolean=false): Todo
-      todos: [Todo]
-      foo(things: [String]!=["foo", "bar"]): [String!]
+      todo(
+        id: String!,
+        "A default value of false"
+        isCompleted: Boolean=false
+      ): Todo
+
+      "Returns a list (or null) that can contain null values"
+      todos(
+        "Reauired argument that is a list that cannot contain null values"
+        ids: [String!]!
+      ): [Todo]
   }
 
   type Mutation {
       "A Mutation with 1 required argument"
-      create_todo(todo: TodoInputType!): Todo
+      create_todo(
+        todo: TodoInputType!
+      ): Todo!
+
       "A Mutation with 2 required arguments"
-      update_todo(id: String!, todo: TodoInputType!): Todo
+      update_todo(
+        id: String!,
+        data: TodoInputType!
+      ): Todo!
+
+      "Returns a list (or null) that can contain null values"
+      update_todos(
+        ids: [String!]!
+        data: TodoInputType!
+      ): [Todo]
   }
 `
 
@@ -55,14 +78,10 @@ const introspectionQueryJSON = graphqlSync(
   readmeSchema,
   getIntrospectionQuery()
 ).data as IntrospectionQuery
-
-console.log(JSON.stringify(introspectionQueryJSON))
 const readmeResult = fromIntrospectionQuery(introspectionQueryJSON)
+
 // Get rid of undefined values this way
 const cleanedUpReadmeResult = JSON.parse(JSON.stringify(readmeResult))
-
-console.log(JSON.stringify(cleanedUpReadmeResult))
-process.exit()
 
 const startsWithTestGenerator = (stringToTest: string) => {
   return (stringToLookFor: string) =>

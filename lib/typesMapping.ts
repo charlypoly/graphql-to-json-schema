@@ -57,15 +57,12 @@ export const graphqlToJSONType = (k: GraphqlToJSONTypeArg, options: GraphqlToJSO
 
     if (includes(['OBJECT', 'INPUT_OBJECT', 'ENUM', 'SCALAR'], k.kind)) {
       jsonType.$ref = `#/definitions/${name}`
-      // https://tools.ietf.org/html/draft-wright-json-schema-01#section-8
-      // All other properties in a "$ref" object MUST be ignored.
-      // if (includes(['SCALAR'], k.kind)) {
-      //   jsonType.type = (typesMapping as any)[name]
-      // }
     } else {
       jsonType.type = (typesMapping as any)[name]
     }
 
+    // Only if the option allows for it, represent an array with nullable items
+    // using the "anyOf"
     if (nullableArrayItems && isArray && !isNonNull) {
       return {
         anyOf: [

@@ -47,6 +47,8 @@ export type IntrospectionFieldReducerItem =
   | IntrospectionField
   | IntrospectionInputValue
 
+// Wrapper for creating a reducer that allows for passing options
+// to the reducer
 export const introspectionFieldReducerGenerator: (
   options: ReducerOptions
 ) => MemoListIterator<

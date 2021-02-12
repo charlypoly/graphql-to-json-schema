@@ -33,8 +33,11 @@ const result = fromIntrospectionQuery(introspection);
       name: String!
       completed: Boolean
       color: Color
+
       "A field that requires an argument"
-      colors(filter: [Color!]!): [Color!]!
+      colors(
+        filter: [Color!]!
+      ): [Color!]!
   }
 
   input TodoInputType {
@@ -44,23 +47,44 @@ const result = fromIntrospectionQuery(introspection);
   }
 
   enum Color {
-    "Red color"
-    RED
-    "Green color"
-    GREEN
+      "Red color"
+      RED
+      "Green color"
+      GREEN
   }
 
   type Query {
       "A Query with 1 required argument and 1 optional argument"
-      todo(id: String!, isCompleted: Boolean=false): Todo
-      todos: [Todo]
+      todo(
+        id: String!,
+        "A default value of false"
+        isCompleted: Boolean=false
+      ): Todo
+
+      "Returns a list (or null) that can contain null values"
+      todos(
+        "Reauired argument that is a list that cannot contain null values"
+        ids: [String!]!
+      ): [Todo]
   }
 
   type Mutation {
       "A Mutation with 1 required argument"
-      create_todo(todo: TodoInputType!): Todo
+      create_todo(
+        todo: TodoInputType!
+      ): Todo!
+
       "A Mutation with 2 required arguments"
-      update_todo(id: String!, todo: TodoInputType!): Todo
+      update_todo(
+        id: String!,
+        data: TodoInputType!
+      ): Todo!
+
+      "Returns a list (or null) that can contain null values"
+      update_todos(
+        ids: [String!]!
+        data: TodoInputType!
+      ): [Todo]
   }
 ```
 
@@ -81,10 +105,10 @@ const result = fromIntrospectionQuery(introspection);
             arguments: {
               type: 'object',
               properties: {
-                id: { '$ref': '#/definitions/String', type: 'string' },
+                id: { '$ref': '#/definitions/String' },
                 isCompleted: {
+                  description: 'A default value of false',
                   '$ref': '#/definitions/Boolean',
-                  type: 'boolean',
                   default: false
                 }
               },
@@ -94,10 +118,26 @@ const result = fromIntrospectionQuery(introspection);
           required: []
         },
         todos: {
+          description: 'Returns a list (or null) that can contain null values',
           type: 'object',
           properties: {
-            return: { type: 'array', items: { '$ref': '#/definitions/Todo' } },
-            arguments: { type: 'object', properties: {}, required: [] }
+            return: {
+              type: 'array',
+              items: {
+                anyOf: [ { '$ref': '#/definitions/Todo' }, { type: 'null' } ]
+              }
+            },
+            arguments: {
+              type: 'object',
+              properties: {
+                ids: {
+                  description: 'Reauired argument that is a list that cannot contain null values',
+                  type: 'array',
+                  items: { '$ref': '#/definitions/String' }
+                }
+              },
+              required: [ 'ids' ]
+            }
           },
           required: []
         }
@@ -128,10 +168,34 @@ const result = fromIntrospectionQuery(introspection);
             arguments: {
               type: 'object',
               properties: {
-                id: { '$ref': '#/definitions/String', type: 'string' },
-                todo: { '$ref': '#/definitions/TodoInputType' }
+                id: { '$ref': '#/definitions/String' },
+                data: { '$ref': '#/definitions/TodoInputType' }
               },
-              required: [ 'id', 'todo' ]
+              required: [ 'id', 'data' ]
+            }
+          },
+          required: []
+        },
+        update_todos: {
+          description: 'Returns a list (or null) that can contain null values',
+          type: 'object',
+          properties: {
+            return: {
+              type: 'array',
+              items: {
+                anyOf: [ { '$ref': '#/definitions/Todo' }, { type: 'null' } ]
+              }
+            },
+            arguments: {
+              type: 'object',
+              properties: {
+                ids: {
+                  type: 'array',
+                  items: { '$ref': '#/definitions/String' }
+                },
+                data: { '$ref': '#/definitions/TodoInputType' }
+              },
+              required: [ 'ids', 'data' ]
             }
           },
           required: []
@@ -147,7 +211,7 @@ const result = fromIntrospectionQuery(introspection);
         id: {
           type: 'object',
           properties: {
-            return: { '$ref': '#/definitions/String', type: 'string' },
+            return: { '$ref': '#/definitions/String' },
             arguments: { type: 'object', properties: {}, required: [] }
           },
           required: []
@@ -155,7 +219,7 @@ const result = fromIntrospectionQuery(introspection);
         name: {
           type: 'object',
           properties: {
-            return: { '$ref': '#/definitions/String', type: 'string' },
+            return: { '$ref': '#/definitions/String' },
             arguments: { type: 'object', properties: {}, required: [] }
           },
           required: []
@@ -163,7 +227,7 @@ const result = fromIntrospectionQuery(introspection);
         completed: {
           type: 'object',
           properties: {
-            return: { '$ref': '#/definitions/Boolean', type: 'boolean' },
+            return: { '$ref': '#/definitions/Boolean' },
             arguments: { type: 'object', properties: {}, required: [] }
           },
           required: []
@@ -200,8 +264,8 @@ const result = fromIntrospectionQuery(introspection);
     TodoInputType: {
       type: 'object',
       properties: {
-        name: { '$ref': '#/definitions/String', type: 'string' },
-        completed: { '$ref': '#/definitions/Boolean', type: 'boolean' },
+        name: { '$ref': '#/definitions/String' },
+        completed: { '$ref': '#/definitions/Boolean' },
         color: { '$ref': '#/definitions/Color', default: 'RED' }
       },
       required: [ 'name' ]
