@@ -39,6 +39,7 @@ const readmeSDL: string = `
       "A Query with 1 required argument and 1 optional argument"
       todo(id: String!, isCompleted: Boolean=false): Todo
       todos: [Todo]
+      foo(things: [String]!=["foo", "bar"]): [String!]
   }
 
   type Mutation {
@@ -54,10 +55,14 @@ const introspectionQueryJSON = graphqlSync(
   readmeSchema,
   getIntrospectionQuery()
 ).data as IntrospectionQuery
-const readmeResult = fromIntrospectionQuery(introspectionQueryJSON)
 
+console.log(JSON.stringify(introspectionQueryJSON))
+const readmeResult = fromIntrospectionQuery(introspectionQueryJSON)
 // Get rid of undefined values this way
 const cleanedUpReadmeResult = JSON.parse(JSON.stringify(readmeResult))
+
+console.log(JSON.stringify(cleanedUpReadmeResult))
+process.exit()
 
 const startsWithTestGenerator = (stringToTest: string) => {
   return (stringToLookFor: string) =>

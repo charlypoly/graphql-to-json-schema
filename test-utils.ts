@@ -7,6 +7,8 @@ import {
 } from 'graphql'
 import { JSONSchema6 } from 'json-schema'
 
+import { isEqual, cloneDeepWith } from 'lodash'
+
 type GetTodoSchemaIntrospectionResult = {
   schema: GraphQLSchema
   introspection: IntrospectionQuery
@@ -71,7 +73,7 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
                 optionalNonNullStrings: [String!]
 
                 requiredNullableStrings: [String]!
-                optionalNullableStrings: [String]
+                optionalNullableStringsWithDefault: [String]=["foo"]
             ): Todo!
             todos: [Todo!]!
         }
@@ -123,7 +125,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
                     ],
                   },
                 },
-                optionalNullableStrings: {
+                optionalNullableStringsWithDefault: {
                   type: 'array',
                   items: {
                     anyOf: [
@@ -131,6 +133,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
                       { type: 'null' }
                     ],
                   },
+                  default: [ 'foo' ],
                 },
               },
               required: ['id', 'requiredNonNullStrings', 'requiredNullableStrings'],
@@ -400,3 +403,18 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
     },
   },
 }
+
+export const todoSchemaAsJsonSchemaWithoutNullableArrayItems: JSONSchema6 = cloneDeepWith(
+  todoSchemaAsJsonSchema,
+  (value, key, object, stack) => {
+    // Convert the new way back to the old way
+    if (
+      key === 'items' &&
+      isEqual(Object.keys(value), ['anyOf']) &&
+      value.anyOf.length === 2 &&
+      value.anyOf.find((e: any) => isEqual(e, {type: 'null'}))
+     ) {
+      return value.anyOf.find((e: any) => !isEqual(e, {type: 'null'}))
+    }
+  }
+)

@@ -14,13 +14,21 @@ export interface GraphQLJSONSchema6 extends JSONSchema6 {
 }
 
 export interface FromIntrospectionQueryOptions {
-  ignoreInternals?: boolean // true by default
+  ignoreInternals?: boolean // default: true
+  nullableArrayItems?: boolean // default: true
 }
+
 export const fromIntrospectionQuery = (
   introspection: IntrospectionQuery,
   opts?: FromIntrospectionQueryOptions
 ): JSONSchema6 => {
-  const options = opts || { ignoreInternals: true }
+  const options = {
+    // Defaults
+    ignoreInternals: true,
+    nullableArrayItems: true,
+    // User-specified
+    ...(opts || {}),
+  }
   const { queryType, mutationType } = introspection.__schema
 
   if (mutationType) {
@@ -56,12 +64,12 @@ export const fromIntrospectionQuery = (
     $schema: 'http://json-schema.org/draft-06/schema#',
     properties: reduce<IntrospectionType, JSONSchema6Acc>(
       properties,
-      introspectionTypeReducer('properties'),
+      introspectionTypeReducer('properties', options),
       {}
     ),
     definitions: reduce<IntrospectionType, JSONSchema6Acc>(
       filterDefinitionsTypes(definitions, options),
-      introspectionTypeReducer('definitions'),
+      introspectionTypeReducer('definitions', options),
       {}
     ),
   }
