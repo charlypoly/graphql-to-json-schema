@@ -56,7 +56,6 @@ export const introspectionFieldReducerGenerator: (
   JSONSchema6Acc,
   ReadonlyArray<IntrospectionFieldReducerItem>
 > = (options) => {
-
   // reducer for a types and inputs
   const introspectionFieldReducer: MemoListIterator<
     IntrospectionFieldReducerItem,

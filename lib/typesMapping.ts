@@ -34,7 +34,10 @@ export type GraphqlToJSONTypeOptions = {
   isNonNull?: boolean
 }
 
-export const graphqlToJSONType = (k: GraphqlToJSONTypeArg, options: GraphqlToJSONTypeOptions = {}): JSONSchema6 => {
+export const graphqlToJSONType = (
+  k: GraphqlToJSONTypeArg,
+  options: GraphqlToJSONTypeOptions = {}
+): JSONSchema6 => {
   if (isIntrospectionListTypeRef(k)) {
     return {
       type: 'array',
@@ -47,11 +50,7 @@ export const graphqlToJSONType = (k: GraphqlToJSONTypeArg, options: GraphqlToJSO
       IntrospectionInputType | IntrospectionOutputType
     >).name
 
-    const {
-      isArray,
-      isNonNull,
-      nullableArrayItems,
-    } = options
+    const { isArray, isNonNull, nullableArrayItems } = options
 
     const jsonType = {} as JSONSchema6
 
@@ -65,10 +64,7 @@ export const graphqlToJSONType = (k: GraphqlToJSONTypeArg, options: GraphqlToJSO
     // using the "anyOf"
     if (nullableArrayItems && isArray && !isNonNull) {
       return {
-        anyOf: [
-          jsonType,
-          { type: 'null' }
-        ]
+        anyOf: [jsonType, { type: 'null' }],
       }
     }
 

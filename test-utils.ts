@@ -104,7 +104,10 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
             arguments: {
               type: 'object',
               properties: {
-                id: { $ref: '#/definitions/String', description: 'todo identifier' },
+                id: {
+                  $ref: '#/definitions/String',
+                  description: 'todo identifier',
+                },
                 isCompleted: { $ref: '#/definitions/Boolean', default: false },
                 requiredNonNullStrings: {
                   type: 'array',
@@ -119,24 +122,22 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
                 requiredNullableStrings: {
                   type: 'array',
                   items: {
-                    anyOf: [
-                      { $ref: '#/definitions/String' },
-                      { type: 'null' }
-                    ],
+                    anyOf: [{ $ref: '#/definitions/String' }, { type: 'null' }],
                   },
                 },
                 optionalNullableStringsWithDefault: {
                   type: 'array',
                   items: {
-                    anyOf: [
-                      { $ref: '#/definitions/String' },
-                      { type: 'null' }
-                    ],
+                    anyOf: [{ $ref: '#/definitions/String' }, { type: 'null' }],
                   },
-                  default: [ 'foo' ],
+                  default: ['foo'],
                 },
               },
-              required: ['id', 'requiredNonNullStrings', 'requiredNullableStrings'],
+              required: [
+                'id',
+                'requiredNonNullStrings',
+                'requiredNullableStrings',
+              ],
             },
             return: {
               $ref: '#/definitions/Todo',
@@ -323,10 +324,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
                 nonRequiredArgumentOfNullableStrings: {
                   type: 'array',
                   items: {
-                    anyOf: [
-                      { $ref: '#/definitions/String' },
-                      { type: 'null' },
-                    ],
+                    anyOf: [{ $ref: '#/definitions/String' }, { type: 'null' }],
                   },
                 },
                 nonRequiredArgumentOfNonNullableStrings: {
@@ -336,10 +334,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
                 requiredArgumentOfNullableStrings: {
                   type: 'array',
                   items: {
-                    anyOf: [
-                      { $ref: '#/definitions/String' },
-                      { type: 'null' },
-                    ],
+                    anyOf: [{ $ref: '#/definitions/String' }, { type: 'null' }],
                   },
                 },
                 requiredArgumentOfNonNullableStrings: {
@@ -361,10 +356,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
             return: {
               type: 'array',
               items: {
-                anyOf: [
-                  { $ref: '#/definitions/String' },
-                  { type: 'null' },
-                ],
+                anyOf: [{ $ref: '#/definitions/String' }, { type: 'null' }],
               },
             },
             arguments: { type: 'object', properties: {}, required: [] },
@@ -412,9 +404,9 @@ export const todoSchemaAsJsonSchemaWithoutNullableArrayItems: JSONSchema6 = clon
       key === 'items' &&
       isEqual(Object.keys(value), ['anyOf']) &&
       value.anyOf.length === 2 &&
-      value.anyOf.find((e: any) => isEqual(e, {type: 'null'}))
-     ) {
-      return value.anyOf.find((e: any) => !isEqual(e, {type: 'null'}))
+      value.anyOf.find((e: any) => isEqual(e, { type: 'null' }))
+    ) {
+      return value.anyOf.find((e: any) => !isEqual(e, { type: 'null' }))
     }
   }
 )
