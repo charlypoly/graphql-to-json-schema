@@ -14,8 +14,8 @@ export interface GraphQLJSONSchema6 extends JSONSchema6 {
 }
 
 export interface FromIntrospectionQueryOptions {
-  ignoreInternals?: boolean // default: true
-  nullableArrayItems?: boolean // default: true
+  ignoreInternals?: boolean
+  nullableArrayItems?: boolean
 }
 
 export const fromIntrospectionQuery = (
@@ -25,7 +25,7 @@ export const fromIntrospectionQuery = (
   const options = {
     // Defaults
     ignoreInternals: true,
-    nullableArrayItems: true,
+    nullableArrayItems: false,
     // User-specified
     ...(opts || {}),
   }

@@ -78,7 +78,12 @@ const introspectionQueryJSON = graphqlSync(
   readmeSchema,
   getIntrospectionQuery()
 ).data as IntrospectionQuery
-const readmeResult = fromIntrospectionQuery(introspectionQueryJSON)
+
+const options = {
+  nullableArrayItems: true
+}
+
+const readmeResult = fromIntrospectionQuery(introspectionQueryJSON, options)
 
 // Get rid of undefined values this way
 const cleanedUpReadmeResult = JSON.parse(JSON.stringify(readmeResult))
@@ -112,14 +117,16 @@ const keyComparator = (a: string, b: string) => {
   return 0
 }
 
-const output = `
-### Input
+const output = `### Input
 
 \`\`\`graphql${readmeSDL}\`\`\`
 
 ### Output
 
 \`\`\`js
+// Output is from call to fromIntrospectionQuery with the following options:
+const options = ${inspect(options)}
+
 ${inspect(cleanedUpReadmeResult, { depth: null, sorted: keyComparator })}
 \`\`\`
 `

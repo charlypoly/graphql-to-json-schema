@@ -18,6 +18,14 @@
     "forceConsistentCasingInFileNames": true,
 
     "outDir": "./dist",
-    "rootDir": "."
+    "rootDir": ".",
   },
+  "exclude": [
+    "node_modules",
+    // Don't try to compile the already compiled stuff
+    "./dist",
+    // Don't do anything with test files as they will be compiled by
+    // ts-jest
+    "**/*spec.ts",
+  ]
 }

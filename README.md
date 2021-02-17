@@ -11,16 +11,30 @@ Transform a GraphQL Schema introspection file to a valid JSON Schema.
 ```ts
 import {
     graphqlSync,
-    introspectionQuery,
+    getIntrospectionQuery,
     IntrospectionQuery
 } from 'graphql';
+
 import { fromIntrospectionQuery } from 'graphql-2-json-schema';
 
+const options = {
+  // Whether or not to ignore GraphQL internals that are probably not relevant
+  // to documentation generation.
+  // Defaults to `true`
+  ignoreInternals: true,
+  // Whether or not to properly represent GraphQL Lists with Nullable elements
+  // as type "array" with items being an "anyOf" that includes the possible
+  // type and a "null" type.
+  // Defaults to `false` for backwards compatibility, but in future versions
+  // the effect of `true` is likely going to be the default and only way. It is
+  // highly recommended that new implementations set this value to `true`.
+  nullableArrayItems: true
+}
+
 // schema is your GraphQL schema.
+const introspection = graphqlSync(schema, getIntrospectionQuery()).data as IntrospectionQuery;
 
-const introspection = graphqlSync(schema, introspectionQuery).data as IntrospectionQuery;
-
-const result = fromIntrospectionQuery(introspection);
+const jsonSchema = fromIntrospectionQuery(introspection, options);
 ```
 
 ## Example
@@ -91,6 +105,9 @@ const result = fromIntrospectionQuery(introspection);
 ### Output
 
 ```js
+// Output is from call to fromIntrospectionQuery with the following options:
+const options = { nullableArrayItems: true }
+
 {
   '$schema': 'http://json-schema.org/draft-06/schema#',
   properties: {
