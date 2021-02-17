@@ -34,7 +34,6 @@
     "typescript": "^4.1.3"
   },
   "jest": {
-    "verbose": true,
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },

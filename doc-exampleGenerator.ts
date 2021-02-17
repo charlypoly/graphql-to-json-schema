@@ -80,7 +80,7 @@ const introspectionQueryJSON = graphqlSync(
 ).data as IntrospectionQuery
 
 const options = {
-  nullableArrayItems: true
+  nullableArrayItems: true,
 }
 
 const readmeResult = fromIntrospectionQuery(introspectionQueryJSON, options)
