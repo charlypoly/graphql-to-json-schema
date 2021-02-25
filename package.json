@@ -12,7 +12,7 @@
     "lodash": "^4.17.20"
   },
   "scripts": {
-    "test": "yarn prepare && jest",
+    "test": "jest",
     "prettier:check": "prettier -c \"**/*.ts\"",
     "prettier:format": "prettier -w \"**/*.ts\"",
     "generateReadmeExample": "npx ts-node doc-exampleGenerator.ts",

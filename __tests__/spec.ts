@@ -1,6 +1,6 @@
 import ajv from 'ajv'
 import { JSONSchema6 } from 'json-schema'
-import { fromIntrospectionQuery } from '../dist/lib/fromIntrospectionQuery'
+import { fromIntrospectionQuery } from '../lib/fromIntrospectionQuery'
 import {
   getTodoSchemaIntrospection,
   todoSchemaAsJsonSchema,
