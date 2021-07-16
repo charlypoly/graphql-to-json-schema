@@ -13,6 +13,7 @@ import {
   isIntrospectionInputValue,
   isIntrospectionListTypeRef,
   isIntrospectionObjectType,
+  isIntrospectionUnionType,
   isNonNullIntrospectionType,
   isIntrospectionScalarType,
   isIntrospectionDefaultScalarType,
@@ -143,6 +144,10 @@ export const introspectionTypeReducer: (
         {}
       ),
       required: getRequiredFields(curr.inputFields),
+    }
+  } else if (isIntrospectionUnionType(curr)) {
+    acc[curr.name] = {
+      anyOf: curr.possibleTypes.map((type) => graphqlToJSONType(type, options)),
     }
   } else if (isIntrospectionEnumType(curr)) {
     acc[curr.name] = {

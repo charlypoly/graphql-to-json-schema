@@ -54,6 +54,13 @@ const jsonSchema = fromIntrospectionQuery(introspection, options);
       ): [Color!]!
   }
 
+  type SimpleTodo {
+    id: String!
+    name: String!
+  }
+
+  union TodoUnion = Todo | SimpleTodo
+
   input TodoInputType {
       name: String!
       completed: Boolean
@@ -277,6 +284,34 @@ const options = { nullableArrayItems: true }
         }
       },
       required: [ 'id', 'name', 'colors' ]
+    },
+    SimpleTodo: {
+      type: 'object',
+      properties: {
+        id: {
+          type: 'object',
+          properties: {
+            return: { '$ref': '#/definitions/String' },
+            arguments: { type: 'object', properties: {}, required: [] }
+          },
+          required: []
+        },
+        name: {
+          type: 'object',
+          properties: {
+            return: { '$ref': '#/definitions/String' },
+            arguments: { type: 'object', properties: {}, required: [] }
+          },
+          required: []
+        }
+      },
+      required: [ 'id', 'name' ]
+    },
+    TodoUnion: {
+      anyOf: [
+        { '$ref': '#/definitions/Todo' },
+        { '$ref': '#/definitions/SimpleTodo' }
+      ]
     },
     TodoInputType: {
       type: 'object',

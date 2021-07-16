@@ -25,6 +25,13 @@ const readmeSDL: string = `
       ): [Color!]!
   }
 
+  type SimpleTodo {
+    id: String!
+    name: String!
+  }
+
+  union TodoUnion = Todo | SimpleTodo
+
   input TodoInputType {
       name: String!
       completed: Boolean

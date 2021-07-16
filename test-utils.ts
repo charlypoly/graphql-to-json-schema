@@ -47,6 +47,15 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
             nullableFieldThatReturnsListOfNullableStrings: [String]
         }
 
+        "A simpler ToDo Object"
+        type SimpleTodo {
+          id: String!
+          name: String!
+        }
+
+        "A Union of Todo and SimpleTodo"
+        union TodoUnion = Todo | SimpleTodo
+
         """
         A type that describes ToDoInputType. Its description might not
         fit within the bounds of 80 width and so you want MULTILINE
@@ -366,6 +375,29 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
       },
       required: ['id', 'name', 'requiredColors'],
     },
+    SimpleTodo: {
+      type: 'object',
+      description: 'A simpler ToDo Object',
+      properties: {
+        id: {
+          type: 'object',
+          properties: {
+            return: { $ref: '#/definitions/String' },
+            arguments: { type: 'object', properties: {}, required: [] },
+          },
+          required: [],
+        },
+        name: {
+          type: 'object',
+          properties: {
+            return: { $ref: '#/definitions/String' },
+            arguments: { type: 'object', properties: {}, required: [] },
+          },
+          required: [],
+        },
+      },
+      required: ['id', 'name'],
+    },
     Color: {
       // Yes, ENUM types should be the JSON built-in "string" type
       type: 'string',
@@ -392,6 +424,13 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
         color: { default: 'RED', $ref: '#/definitions/Color' },
       },
       required: ['name'],
+    },
+    TodoUnion: {
+      description: 'A Union of Todo and SimpleTodo',
+      anyOf: [
+        { $ref: '#/definitions/Todo' },
+        { $ref: '#/definitions/SimpleTodo' },
+      ],
     },
   },
 }
