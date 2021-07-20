@@ -427,7 +427,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
     },
     TodoUnion: {
       description: 'A Union of Todo and SimpleTodo',
-      anyOf: [
+      oneOf: [
         { $ref: '#/definitions/Todo' },
         { $ref: '#/definitions/SimpleTodo' },
       ],

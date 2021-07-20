@@ -147,7 +147,7 @@ export const introspectionTypeReducer: (
     }
   } else if (isIntrospectionUnionType(curr)) {
     acc[curr.name] = {
-      anyOf: curr.possibleTypes.map((type) => graphqlToJSONType(type, options)),
+      oneOf: curr.possibleTypes.map((type) => graphqlToJSONType(type, options)),
     }
   } else if (isIntrospectionEnumType(curr)) {
     acc[curr.name] = {
