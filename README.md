@@ -2,16 +2,20 @@
 
 `graphql-2-json-schema` package
 
----
+-----------
 
 Transform a GraphQL Schema introspection file to a valid JSON Schema.
 
 ## Usage
 
 ```ts
-import { graphqlSync, getIntrospectionQuery, IntrospectionQuery } from 'graphql'
+import {
+    graphqlSync,
+    getIntrospectionQuery,
+    IntrospectionQuery
+} from 'graphql';
 
-import { fromIntrospectionQuery } from 'graphql-2-json-schema'
+import { fromIntrospectionQuery } from 'graphql-2-json-schema';
 
 const options = {
   // Whether or not to ignore GraphQL internals that are probably not relevant
@@ -24,14 +28,13 @@ const options = {
   // Defaults to `false` for backwards compatibility, but in future versions
   // the effect of `true` is likely going to be the default and only way. It is
   // highly recommended that new implementations set this value to `true`.
-  nullableArrayItems: true,
+  nullableArrayItems: true
 }
 
 // schema is your GraphQL schema.
-const introspection = graphqlSync(schema, getIntrospectionQuery())
-  .data as IntrospectionQuery
+const introspection = graphqlSync(schema, getIntrospectionQuery()).data as IntrospectionQuery;
 
-const jsonSchema = fromIntrospectionQuery(introspection, options)
+const jsonSchema = fromIntrospectionQuery(introspection, options);
 ```
 
 ## Example
@@ -39,61 +42,71 @@ const jsonSchema = fromIntrospectionQuery(introspection, options)
 ### Input
 
 ```graphql
-type Todo {
-  id: String!
-  name: String!
-  completed: Boolean
-  color: Color
+  type Todo {
+      id: String!
+      name: String!
+      completed: Boolean
+      color: Color
 
-  "A field that requires an argument"
-  colors(filter: [Color!]!): [Color!]!
-}
+      "A field that requires an argument"
+      colors(
+        filter: [Color!]!
+      ): [Color!]!
+  }
 
-type SimpleTodo {
-  id: String!
-  name: String!
-}
-
-union TodoUnion = Todo | SimpleTodo
-
-input TodoInputType {
-  name: String!
-  completed: Boolean
-  color: Color = RED
-}
-
-enum Color {
-  "Red color"
-  RED
-  "Green color"
-  GREEN
-}
-
-type Query {
-  "A Query with 1 required argument and 1 optional argument"
-  todo(
+  type SimpleTodo {
     id: String!
-    "A default value of false"
-    isCompleted: Boolean = false
-  ): Todo
+    name: String!
+  }
 
-  "Returns a list (or null) that can contain null values"
-  todos(
-    "Reauired argument that is a list that cannot contain null values"
-    ids: [String!]!
-  ): [Todo]
-}
+  union TodoUnion = Todo | SimpleTodo
 
-type Mutation {
-  "A Mutation with 1 required argument"
-  create_todo(todo: TodoInputType!): Todo!
+  input TodoInputType {
+      name: String!
+      completed: Boolean
+      color: Color=RED
+  }
 
-  "A Mutation with 2 required arguments"
-  update_todo(id: String!, data: TodoInputType!): Todo!
+  enum Color {
+      "Red color"
+      RED
+      "Green color"
+      GREEN
+  }
 
-  "Returns a list (or null) that can contain null values"
-  update_todos(ids: [String!]!, data: TodoInputType!): [Todo]
-}
+  type Query {
+      "A Query with 1 required argument and 1 optional argument"
+      todo(
+        id: String!,
+        "A default value of false"
+        isCompleted: Boolean=false
+      ): Todo
+
+      "Returns a list (or null) that can contain null values"
+      todos(
+        "Required argument that is a list that cannot contain null values"
+        ids: [String!]!
+      ): [Todo]
+  }
+
+  type Mutation {
+      "A Mutation with 1 required argument"
+      create_todo(
+        todo: TodoInputType!
+      ): Todo!
+
+      "A Mutation with 2 required arguments"
+      update_todo(
+        id: String!,
+        data: TodoInputType!
+      ): Todo!
+
+      "Returns a list (or null) that can contain null values"
+      update_todos(
+        ids: [String!]!
+        data: TodoInputType!
+      ): [Todo]
+  }
 ```
 
 ### Output
@@ -142,7 +155,7 @@ const options = { nullableArrayItems: true }
               type: 'object',
               properties: {
                 ids: {
-                  description: 'Reauired argument that is a list that cannot contain null values',
+                  description: 'Required argument that is a list that cannot contain null values',
                   type: 'array',
                   items: { '$ref': '#/definitions/String' }
                 }

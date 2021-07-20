@@ -55,7 +55,7 @@ const readmeSDL: string = `
 
       "Returns a list (or null) that can contain null values"
       todos(
-        "Reauired argument that is a list that cannot contain null values"
+        "Required argument that is a list that cannot contain null values"
         ids: [String!]!
       ): [Todo]
   }
