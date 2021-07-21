@@ -54,6 +54,13 @@ const jsonSchema = fromIntrospectionQuery(introspection, options);
       ): [Color!]!
   }
 
+  type SimpleTodo {
+    id: String!
+    name: String!
+  }
+
+  union TodoUnion = Todo | SimpleTodo
+
   input TodoInputType {
       name: String!
       completed: Boolean
@@ -77,7 +84,7 @@ const jsonSchema = fromIntrospectionQuery(introspection, options);
 
       "Returns a list (or null) that can contain null values"
       todos(
-        "Reauired argument that is a list that cannot contain null values"
+        "Required argument that is a list that cannot contain null values"
         ids: [String!]!
       ): [Todo]
   }
@@ -148,7 +155,7 @@ const options = { nullableArrayItems: true }
               type: 'object',
               properties: {
                 ids: {
-                  description: 'Reauired argument that is a list that cannot contain null values',
+                  description: 'Required argument that is a list that cannot contain null values',
                   type: 'array',
                   items: { '$ref': '#/definitions/String' }
                 }
@@ -277,6 +284,34 @@ const options = { nullableArrayItems: true }
         }
       },
       required: [ 'id', 'name', 'colors' ]
+    },
+    SimpleTodo: {
+      type: 'object',
+      properties: {
+        id: {
+          type: 'object',
+          properties: {
+            return: { '$ref': '#/definitions/String' },
+            arguments: { type: 'object', properties: {}, required: [] }
+          },
+          required: []
+        },
+        name: {
+          type: 'object',
+          properties: {
+            return: { '$ref': '#/definitions/String' },
+            arguments: { type: 'object', properties: {}, required: [] }
+          },
+          required: []
+        }
+      },
+      required: [ 'id', 'name' ]
+    },
+    TodoUnion: {
+      oneOf: [
+        { '$ref': '#/definitions/Todo' },
+        { '$ref': '#/definitions/SimpleTodo' }
+      ]
     },
     TodoInputType: {
       type: 'object',

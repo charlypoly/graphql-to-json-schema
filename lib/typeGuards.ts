@@ -12,6 +12,7 @@ import {
   IntrospectionSchema,
   IntrospectionType,
   IntrospectionTypeRef,
+  IntrospectionUnionType,
   IntrospectionScalarType,
 } from 'graphql'
 import { filter, has, startsWith, includes } from 'lodash'
@@ -48,6 +49,10 @@ export const isIntrospectionEnumType = (
   type: IntrospectionSchema['types'][0]
 ): type is IntrospectionEnumType => type.kind === 'ENUM'
 
+export const isIntrospectionUnionType = (
+  type: IntrospectionSchema['types'][0]
+): type is IntrospectionUnionType => type.kind === 'UNION'
+
 export const isNonNullIntrospectionType = (
   type: IntrospectionTypeRef
 ): type is IntrospectionNonNullTypeRef<
@@ -78,6 +83,7 @@ export const filterDefinitionsTypes = (
       ((isIntrospectionObjectType(type) && !!type.fields) ||
         (isIntrospectionInputObjectType(type) && !!type.inputFields) ||
         (isIntrospectionEnumType(type) && !!type.enumValues) ||
+        (isIntrospectionUnionType(type) && !!type.possibleTypes) ||
         (isIntrospectionScalarType(type) && !!type.name)) &&
       (!ignoreInternals || (ignoreInternals && !startsWith(type.name, '__')))
   )
