@@ -2,6 +2,7 @@ import {
   IntrospectionEnumType,
   IntrospectionField,
   IntrospectionInputObjectType,
+  IntrospectionInterfaceType,
   IntrospectionInputTypeRef,
   IntrospectionInputValue,
   IntrospectionListTypeRef,
@@ -45,6 +46,10 @@ export const isIntrospectionInputObjectType = (
   type: IntrospectionSchema['types'][0]
 ): type is IntrospectionInputObjectType => type.kind === 'INPUT_OBJECT'
 
+export const isIntrospectionInterfaceType = (
+  type: IntrospectionSchema['types'][0]
+): type is IntrospectionInterfaceType => type.kind === 'INTERFACE'
+
 export const isIntrospectionEnumType = (
   type: IntrospectionSchema['types'][0]
 ): type is IntrospectionEnumType => type.kind === 'ENUM'
@@ -82,6 +87,7 @@ export const filterDefinitionsTypes = (
     (type) =>
       ((isIntrospectionObjectType(type) && !!type.fields) ||
         (isIntrospectionInputObjectType(type) && !!type.inputFields) ||
+        (isIntrospectionInterfaceType(type) && !!type.fields) ||
         (isIntrospectionEnumType(type) && !!type.enumValues) ||
         (isIntrospectionUnionType(type) && !!type.possibleTypes) ||
         (isIntrospectionScalarType(type) && !!type.name)) &&

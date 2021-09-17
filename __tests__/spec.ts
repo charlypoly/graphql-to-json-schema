@@ -25,6 +25,7 @@ describe('GraphQL to JSON Schema', () => {
       nullableArrayItems: true,
     }
     const result = fromIntrospectionQuery(introspection, options)
+    // console.log(JSON.stringify(result))
     expect(result).toMatchObject(<JSONSchema6>todoSchemaAsJsonSchema)
     const validator = new ajv()
     validator.addMetaSchema(require('ajv/lib/refs/json-schema-draft-06.json'))

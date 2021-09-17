@@ -10,6 +10,7 @@ import {
   isIntrospectionEnumType,
   isIntrospectionField,
   isIntrospectionInputObjectType,
+  isIntrospectionInterfaceType,
   isIntrospectionInputValue,
   isIntrospectionListTypeRef,
   isIntrospectionObjectType,
@@ -144,6 +145,17 @@ export const introspectionTypeReducer: (
         {}
       ),
       required: getRequiredFields(curr.inputFields),
+    }
+  } else if (isIntrospectionInterfaceType(curr)) {
+    acc[curr.name] = {
+      type: 'object',
+      properties: reduce<IntrospectionFieldReducerItem, JSONSchema6Acc>(
+          curr.fields as IntrospectionFieldReducerItem[],
+          introspectionFieldReducerGenerator(options),
+          {}
+      ),
+      // ignore required for Mutations/Queries
+      required: type === 'definitions' ? getRequiredFields(curr.fields) : []
     }
   } else if (isIntrospectionUnionType(curr)) {
     acc[curr.name] = {
