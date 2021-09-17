@@ -246,6 +246,16 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
     },
   },
   definitions: {
+    Boolean: {
+      type: 'boolean',
+      title: 'Boolean',
+      description: 'The `Boolean` scalar type represents `true` or `false`.'
+    },
+    String: {
+      type: 'string',
+      title: 'String',
+      description: 'The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.'
+    },
     Todo: {
       type: 'object',
       description: 'A ToDo Object',
