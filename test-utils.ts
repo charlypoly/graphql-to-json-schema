@@ -16,7 +16,7 @@ type GetTodoSchemaIntrospectionResult = {
 export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult => {
   const schema = buildSchema(`
         "A ToDo Object"
-        type Todo {
+        type Todo implements Node {
             "A unique identifier"
             id: String!
             name: String!
@@ -56,6 +56,13 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
         "A Union of Todo and SimpleTodo"
         union TodoUnion = Todo | SimpleTodo
 
+        enum Color {
+          "Red color"
+          RED
+          "Green color"
+          GREEN
+        }
+
         """
         A type that describes ToDoInputType. Its description might not
         fit within the bounds of 80 width and so you want MULTILINE
@@ -66,11 +73,10 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
             color: Color=RED
         }
 
-        enum Color {
-          "Red color"
-          RED
-          "Green color"
-          GREEN
+        "Anything with an ID can be a node"
+        interface Node {
+            "A unique identifier"
+            id: String!
         }
 
         type Query {
@@ -85,6 +91,10 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
                 optionalNullableStringsWithDefault: [String]=["foo"]
             ): Todo!
             todos: [Todo!]!
+            node(
+              "Node identifier"
+              id: String!
+            ): Node
         }
 
         type Mutation {
@@ -169,6 +179,25 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
           },
           required: [],
         },
+        node: {
+          type: 'object',
+          properties: {
+            arguments: {
+              type: 'object',
+              properties: {
+                id: {
+                  description: "Node identifier",
+                  $ref: '#/definitions/String',
+                },
+              },
+              required: ['id'],
+            },
+            return: {
+              $ref: '#/definitions/Node',
+            }
+          },
+          required: []
+        },
       },
       // Inappropriate for individual queries to be required, despite possibly having
       // NON_NULL return types
@@ -217,6 +246,16 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
     },
   },
   definitions: {
+    Boolean: {
+      type: 'boolean',
+      title: 'Boolean',
+      description: 'The `Boolean` scalar type represents `true` or `false`.'
+    },
+    String: {
+      type: 'string',
+      title: 'String',
+      description: 'The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.'
+    },
     Todo: {
       type: 'object',
       description: 'A ToDo Object',
@@ -431,6 +470,22 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
         { $ref: '#/definitions/Todo' },
         { $ref: '#/definitions/SimpleTodo' },
       ],
+    },
+    Node: {
+      type: 'object',
+      description: 'Anything with an ID can be a node',
+      properties: {
+        id: {
+          type: 'object',
+          description: 'A unique identifier',
+          properties: {
+            return: { '$ref': '#/definitions/String' },
+            arguments: { type: 'object', properties: {}, required: [] }
+          },
+          required: [],
+        }
+      },
+      required: [ 'id' ],
     },
   },
 }

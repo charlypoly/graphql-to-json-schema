@@ -12,7 +12,7 @@ describe('GraphQL to JSON Schema', () => {
 
   test('from IntrospectionQuery object', () => {
     const result = fromIntrospectionQuery(introspection)
-    expect(result).toMatchObject(
+    expect(result).toEqual(
       <JSONSchema6>todoSchemaAsJsonSchemaWithoutNullableArrayItems
     )
     const validator = new ajv()
@@ -25,7 +25,7 @@ describe('GraphQL to JSON Schema', () => {
       nullableArrayItems: true,
     }
     const result = fromIntrospectionQuery(introspection, options)
-    expect(result).toMatchObject(<JSONSchema6>todoSchemaAsJsonSchema)
+    expect(result).toEqual(<JSONSchema6>todoSchemaAsJsonSchema)
     const validator = new ajv()
     validator.addMetaSchema(require('ajv/lib/refs/json-schema-draft-06.json'))
     expect(validator.validateSchema(result)).toBe(true)

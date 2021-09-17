@@ -55,7 +55,7 @@ export const graphqlToJSONType = (
 
     const jsonType = {} as JSONSchema6
 
-    if (includes(['OBJECT', 'INPUT_OBJECT', 'ENUM', 'SCALAR'], k.kind)) {
+    if (includes(['OBJECT', 'INPUT_OBJECT', 'INTERFACE', 'ENUM', 'SCALAR'], k.kind)) {
       jsonType.$ref = `#/definitions/${name}`
     } else {
       jsonType.type = (typesMapping as any)[name]
