@@ -186,7 +186,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
               type: 'object',
               properties: {
                 id: {
-                  description: "Node identifier",
+                  description: 'Node identifier',
                   $ref: '#/definitions/String',
                 },
               },
@@ -194,9 +194,9 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
             },
             return: {
               $ref: '#/definitions/Node',
-            }
+            },
           },
-          required: []
+          required: [],
         },
       },
       // Inappropriate for individual queries to be required, despite possibly having
@@ -249,12 +249,13 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
     Boolean: {
       type: 'boolean',
       title: 'Boolean',
-      description: 'The `Boolean` scalar type represents `true` or `false`.'
+      description: 'The `Boolean` scalar type represents `true` or `false`.',
     },
     String: {
       type: 'string',
       title: 'String',
-      description: 'The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.'
+      description:
+        'The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.',
     },
     Todo: {
       type: 'object',
@@ -479,13 +480,13 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
           type: 'object',
           description: 'A unique identifier',
           properties: {
-            return: { '$ref': '#/definitions/String' },
-            arguments: { type: 'object', properties: {}, required: [] }
+            return: { $ref: '#/definitions/String' },
+            arguments: { type: 'object', properties: {}, required: [] },
           },
           required: [],
-        }
+        },
       },
-      required: [ 'id' ],
+      required: ['id'],
     },
   },
 }

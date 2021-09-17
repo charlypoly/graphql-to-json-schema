@@ -150,12 +150,12 @@ export const introspectionTypeReducer: (
     acc[curr.name] = {
       type: 'object',
       properties: reduce<IntrospectionFieldReducerItem, JSONSchema6Acc>(
-          curr.fields as IntrospectionFieldReducerItem[],
-          introspectionFieldReducerGenerator(options),
-          {}
+        curr.fields as IntrospectionFieldReducerItem[],
+        introspectionFieldReducerGenerator(options),
+        {}
       ),
       // ignore required for Mutations/Queries
-      required: type === 'definitions' ? getRequiredFields(curr.fields) : []
+      required: type === 'definitions' ? getRequiredFields(curr.fields) : [],
     }
   } else if (isIntrospectionUnionType(curr)) {
     acc[curr.name] = {
