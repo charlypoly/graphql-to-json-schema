@@ -89,6 +89,16 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
 
                 requiredNullableStrings: [String]!
                 optionalNullableStringsWithDefault: [String]=["foo"]
+
+                color: Color
+                requiredColor: Color!
+                requiredColorWithDefault: Color! = RED
+
+                colors: [Color]
+                requiredColors: [Color]!
+                requiredColorsNonNullable: [Color!]!
+                requiredColorsWithDefault: [Color]! = [GREEN, RED]
+                requiredColorsNonNullableWithDefault: [Color!]! = [GREEN, RED]
             ): Todo!
             todos: [Todo!]!
             node(
@@ -151,11 +161,50 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
                   },
                   default: ['foo'],
                 },
+
+                color: { $ref: '#/definitions/Color' },
+                requiredColor: { $ref: '#/definitions/Color' },
+                requiredColorWithDefault: { $ref: '#/definitions/Color', default: 'RED' },
+
+                colors: {
+                  type: 'array',
+                  items: {
+                    anyOf: [{ $ref: '#/definitions/Color' }, { type: 'null' }],
+                  },
+                },
+                requiredColors: {
+                  type: 'array',
+                  items: {
+                    anyOf: [{ $ref: '#/definitions/Color' }, { type: 'null' }],
+                  },
+                },
+                requiredColorsNonNullable: {
+                  type: 'array',
+                  items: { $ref: '#/definitions/Color' },
+                },
+                requiredColorsWithDefault: {
+                  type: 'array',
+                  items: {
+                    anyOf: [{ $ref: '#/definitions/Color' }, { type: 'null' }],
+                  },
+                  default: ['GREEN', 'RED'],
+                },
+                requiredColorsNonNullableWithDefault: {
+                  type: 'array',
+                  items: { $ref: '#/definitions/Color' },
+                  default: ['GREEN', 'RED'],
+                },
               },
               required: [
                 'id',
                 'requiredNonNullStrings',
                 'requiredNullableStrings',
+                'requiredColor',
+                'requiredColorWithDefault',
+                'requiredColors',
+                'requiredColorsNonNullable',
+                'requiredColorsWithDefault',
+                'requiredColorsNonNullableWithDefault',
               ],
             },
             return: {

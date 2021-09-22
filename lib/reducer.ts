@@ -103,13 +103,34 @@ export const introspectionFieldReducerGenerator: (
   return introspectionFieldReducer
 }
 
-// ENUM type defaults will not JSON.parse correctly, so if it is an ENUM then don't
-// try to do that.
+// ENUM type defaults will not JSON.parse correctly, so we have to do some work
 // TODO: fix typing here
 export const resolveDefaultValue = (curr: any) => {
-  return isIntrospectionEnumType(curr.type)
-    ? curr.defaultValue
-    : JSON.parse(curr.defaultValue)
+  let type = curr.type
+  let isList = false
+
+  // Dig out the underlying type in case it's a LIST or a NON_NULL or both
+  while (true) {
+    if (isIntrospectionListTypeRef(type)) {
+        isList = true
+        type = type.ofType
+    } else if (isNonNullIntrospectionType(type)) {
+        type = type.ofType
+    } else {
+        break
+    }
+  }
+  // Not an ENUM? No problem...just JSON parse it
+  if (!isIntrospectionEnumType(type)) {
+      return JSON.parse(curr.defaultValue)
+  }
+
+  if (!isList || !curr.defaultValue || typeof curr.defaultValue !== 'string') {
+      return curr.defaultValue
+  }
+
+  // Take a string like "[RED, GREEN]" and convert it to ["RED", "GREEN"]
+  return curr.defaultValue.substr(1, curr.defaultValue.length - 2).split(',').map((val: string) => val.trim())
 }
 
 // Reducer for each type exposed by the GraphQL Schema
