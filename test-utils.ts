@@ -176,7 +176,10 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
 
                 color: { $ref: '#/definitions/Color' },
                 requiredColor: { $ref: '#/definitions/Color' },
-                requiredColorWithDefault: { $ref: '#/definitions/Color', default: 'RED' },
+                requiredColorWithDefault: {
+                  $ref: '#/definitions/Color',
+                  default: 'RED',
+                },
 
                 colors: {
                   type: 'array',
@@ -251,11 +254,8 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
             return: {
               type: 'array',
               items: {
-                anyOf: [
-                  { $ref: '#/definitions/TodoUnion' },
-                  { type: 'null' },
-                ],
-              }
+                anyOf: [{ $ref: '#/definitions/TodoUnion' }, { type: 'null' }],
+              },
             },
           },
           required: [],
@@ -331,11 +331,11 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
               required: ['id'],
             },
             return: {
-              $ref: '#/definitions/TodoUnion'
+              $ref: '#/definitions/TodoUnion',
             },
           },
           required: [],
-        }
+        },
       },
       // Inappropriate for individual mutations to be required, despite possibly having
       // NON_NULL return types

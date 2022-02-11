@@ -113,12 +113,12 @@ export const resolveDefaultValue = (curr: any) => {
   // Dig out the underlying type in case it's a LIST or a NON_NULL or both
   while (true) {
     if (isIntrospectionListTypeRef(type)) {
-        isList = true
-        type = type.ofType
+      isList = true
+      type = type.ofType
     } else if (isNonNullIntrospectionType(type)) {
-        type = type.ofType
+      type = type.ofType
     } else {
-        break
+      break
     }
   }
   // Not an ENUM? No problem...just JSON parse it
@@ -127,11 +127,14 @@ export const resolveDefaultValue = (curr: any) => {
   }
 
   if (!isList || !curr.defaultValue || typeof curr.defaultValue !== 'string') {
-      return curr.defaultValue
+    return curr.defaultValue
   }
 
   // Take a string like "[RED, GREEN]" and convert it to ["RED", "GREEN"]
-  return curr.defaultValue.substr(1, curr.defaultValue.length - 2).split(',').map((val: string) => val.trim())
+  return curr.defaultValue
+    .substr(1, curr.defaultValue.length - 2)
+    .split(',')
+    .map((val: string) => val.trim())
 }
 
 // Reducer for each type exposed by the GraphQL Schema

@@ -63,7 +63,6 @@ export const isNonNullIntrospectionType = (
   IntrospectionNamedTypeRef<IntrospectionType>
 > => type.kind === 'NON_NULL'
 
-
 export const isIntrospectionScalarType = (
   type: IntrospectionSchema['types'][0]
 ): type is IntrospectionScalarType => type.kind === 'SCALAR'
@@ -106,14 +105,12 @@ export const filterDefinitionsTypes = (
   return filter(
     types,
     (type) =>
-      (
-        (isIntrospectionScalarType(type) && !!type.name) ||
+      ((isIntrospectionScalarType(type) && !!type.name) ||
         (isIntrospectionObjectType(type) && !!type.fields) ||
         (isIntrospectionInputObjectType(type) && !!type.inputFields) ||
         (isIntrospectionInterfaceType(type) && !!type.fields) ||
         (isIntrospectionEnumType(type) && !!type.enumValues) ||
-        (isIntrospectionUnionType(type) && !!type.possibleTypes)
-      ) &&
+        (isIntrospectionUnionType(type) && !!type.possibleTypes)) &&
       (!ignoreInternals || (ignoreInternals && !startsWith(type.name, '__')))
   )
 }
