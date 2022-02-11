@@ -111,6 +111,7 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
                 requiredColorsNonNullableWithDefault: [Color!]! = [GREEN, RED]
             ): Todo!
             todos: [Todo!]!
+            todoUnions: [TodoUnion]
             node(
               "Node identifier"
               id: String!
@@ -120,6 +121,7 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
         type Mutation {
             update_todo(id: String!, todo: TodoInputType!): Todo
             create_todo(todo: TodoInputType!): Todo
+            create_todo_union(id: String!): TodoUnion
         }
 `)
 
@@ -238,6 +240,26 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
           },
           required: [],
         },
+        todoUnions: {
+          type: 'object',
+          properties: {
+            arguments: {
+              type: 'object',
+              properties: {},
+              required: [],
+            },
+            return: {
+              type: 'array',
+              items: {
+                anyOf: [
+                  { $ref: '#/definitions/TodoUnion' },
+                  { type: 'null' },
+                ],
+              }
+            },
+          },
+          required: [],
+        },
         node: {
           type: 'object',
           properties: {
@@ -298,6 +320,22 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
           },
           required: [],
         },
+        create_todo_union: {
+          type: 'object',
+          properties: {
+            arguments: {
+              type: 'object',
+              properties: {
+                id: { $ref: '#/definitions/String' },
+              },
+              required: ['id'],
+            },
+            return: {
+              $ref: '#/definitions/TodoUnion'
+            },
+          },
+          required: [],
+        }
       },
       // Inappropriate for individual mutations to be required, despite possibly having
       // NON_NULL return types

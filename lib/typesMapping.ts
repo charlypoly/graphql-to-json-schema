@@ -9,6 +9,7 @@ import {
 import { JSONSchema6, JSONSchema6TypeName } from 'json-schema'
 import { includes } from 'lodash'
 import {
+  SUPPORTED_KINDS,
   isIntrospectionListTypeRef,
   isNonNullIntrospectionType,
 } from './typeGuards'
@@ -57,7 +58,7 @@ export const graphqlToJSONType = (
 
     if (
       includes(
-        ['OBJECT', 'INPUT_OBJECT', 'INTERFACE', 'ENUM', 'SCALAR'],
+        SUPPORTED_KINDS,
         k.kind
       )
     ) {
