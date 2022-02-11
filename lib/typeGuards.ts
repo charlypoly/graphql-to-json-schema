@@ -55,42 +55,42 @@ export const isIntrospectionListTypeRef = (
     | IntrospectionTypeRef
     | IntrospectionInputTypeRef
     | IntrospectionOutputTypeRef
-): type is IntrospectionListTypeRef => type.kind === 'LIST'
+): type is IntrospectionListTypeRef => type.kind === KIND_LIST
 
 export const isNonNullIntrospectionType = (
   type: IntrospectionTypeRef
 ): type is IntrospectionNonNullTypeRef<
   IntrospectionNamedTypeRef<IntrospectionType>
-> => type.kind === 'NON_NULL'
+> => type.kind === KIND_NON_NULL
 
 export const isIntrospectionScalarType = (
   type: IntrospectionSchema['types'][0]
-): type is IntrospectionScalarType => type.kind === 'SCALAR'
+): type is IntrospectionScalarType => type.kind === KIND_SCALAR
 
 export const isIntrospectionObjectType = (
   type: IntrospectionSchema['types'][0]
-): type is IntrospectionObjectType => type.kind === 'OBJECT'
+): type is IntrospectionObjectType => type.kind === KIND_OBJECT
 
 export const isIntrospectionInputObjectType = (
   type: IntrospectionSchema['types'][0]
-): type is IntrospectionInputObjectType => type.kind === 'INPUT_OBJECT'
+): type is IntrospectionInputObjectType => type.kind === KIND_INPUT_OBJECT
 
 export const isIntrospectionInterfaceType = (
   type: IntrospectionSchema['types'][0]
-): type is IntrospectionInterfaceType => type.kind === 'INTERFACE'
+): type is IntrospectionInterfaceType => type.kind === KIND_INTERFACE
 
 export const isIntrospectionEnumType = (
   type: IntrospectionSchema['types'][0]
-): type is IntrospectionEnumType => type.kind === 'ENUM'
+): type is IntrospectionEnumType => type.kind === KIND_ENUM
 
 export const isIntrospectionUnionType = (
   type: IntrospectionSchema['types'][0]
-): type is IntrospectionUnionType => type.kind === 'UNION'
+): type is IntrospectionUnionType => type.kind === KIND_UNION
 
 export const isIntrospectionDefaultScalarType = (
   type: IntrospectionSchema['types'][0]
 ): type is IntrospectionScalarType =>
-  type.kind === 'SCALAR' &&
+  type.kind === KIND_SCALAR &&
   includes(['Boolean', 'String', 'Int', 'Float'], type.name)
 
 // Ignore all GraphQL native Scalars, directives, etc...
