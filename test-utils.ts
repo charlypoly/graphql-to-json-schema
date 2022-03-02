@@ -68,15 +68,25 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
         fit within the bounds of 80 width and so you want MULTILINE
         """
         input TodoInputType {
-            name: String!
-            completed: Boolean
-            color: Color=RED
+          name: String!
+          completed: Boolean
+          color: Color=RED
+          contactInfo: ContactInfoInputType = {
+            email: "spam@example.dev"
+          }
+        }
+
+        """
+        Description of ContactInfoInputType.
+        """
+        input ContactInfoInputType {
+          email: String
         }
 
         "Anything with an ID can be a node"
         interface Node {
-            "A unique identifier"
-            id: String!
+          "A unique identifier"
+          id: String!
         }
 
         type Query {
@@ -511,8 +521,20 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
         name: { $ref: '#/definitions/String' },
         completed: { $ref: '#/definitions/Boolean' },
         color: { default: 'RED', $ref: '#/definitions/Color' },
+        contactInfo: {
+          $ref: '#/definitions/ContactInfoInputType',
+          default: { email: 'spam@example.dev' }
+        },
       },
       required: ['name'],
+    },
+    ContactInfoInputType: {
+      type: 'object',
+      description: 'Description of ContactInfoInputType.',
+      properties: {
+        email: { $ref: "#/definitions/String" },
+      },
+      required: [],
     },
     TodoUnion: {
       description: 'A Union of Todo and SimpleTodo',
