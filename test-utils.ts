@@ -561,7 +561,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
         color: { default: 'RED', $ref: '#/definitions/Color' },
         contactInfo: {
           $ref: '#/definitions/ContactInfoInputType',
-          default: { email: 'spam@example.dev' }
+          default: { email: 'spam@example.dev' },
         },
       },
       required: ['name'],
@@ -570,7 +570,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
       type: 'object',
       description: 'Description of ContactInfoInputType.',
       properties: {
-        email: { $ref: "#/definitions/String" },
+        email: { $ref: '#/definitions/String' },
       },
       required: [],
     },
