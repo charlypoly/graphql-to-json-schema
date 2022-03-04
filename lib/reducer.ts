@@ -1,3 +1,4 @@
+import JSON5 from 'json5'
 import {
   IntrospectionField,
   IntrospectionInputValue,
@@ -121,8 +122,8 @@ export const resolveDefaultValue = (curr: any) => {
     }
   }
   // Not an ENUM? No problem...just JSON parse it
-  if (!isIntrospectionEnumType(type)) {
-      return JSON.parse(curr.defaultValue)
+  if (typeof curr.defaultValue === 'string' && !isIntrospectionEnumType(type)) {
+      return JSON5.parse(curr.defaultValue)
   }
 
   if (!isList || !curr.defaultValue || typeof curr.defaultValue !== 'string') {
