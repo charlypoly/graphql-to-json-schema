@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.9.1](https://github.com/wittydeveloper/graphql-to-json-schema/compare/v0.9.0...v0.9.1) (2022-03-07)
+
 ## [0.9.0](https://github.com/wittydeveloper/graphql-to-json-schema/compare/v0.8.0...v0.9.0) (2021-09-22)
 
 ## [0.8.0](https://github.com/wittydeveloper/graphql-to-json-schema/compare/v0.7.0...v0.8.0) (2021-09-17)
