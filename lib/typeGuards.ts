@@ -15,8 +15,18 @@ import {
   IntrospectionTypeRef,
   IntrospectionUnionType,
   IntrospectionScalarType,
+  TypeKind,
 } from 'graphql'
 import { filter, has, startsWith, includes } from 'lodash'
+
+export const SUPPORTED_KINDS = [
+  TypeKind.SCALAR,
+  TypeKind.OBJECT,
+  TypeKind.INPUT_OBJECT,
+  TypeKind.INTERFACE,
+  TypeKind.ENUM,
+  TypeKind.UNION,
+]
 
 ///////////////////
 /// Type guards ///
@@ -36,41 +46,42 @@ export const isIntrospectionListTypeRef = (
     | IntrospectionTypeRef
     | IntrospectionInputTypeRef
     | IntrospectionOutputTypeRef
-): type is IntrospectionListTypeRef => type.kind === 'LIST'
-
-export const isIntrospectionObjectType = (
-  type: IntrospectionSchema['types'][0]
-): type is IntrospectionObjectType => type.kind === 'OBJECT'
-
-export const isIntrospectionInputObjectType = (
-  type: IntrospectionSchema['types'][0]
-): type is IntrospectionInputObjectType => type.kind === 'INPUT_OBJECT'
-
-export const isIntrospectionInterfaceType = (
-  type: IntrospectionSchema['types'][0]
-): type is IntrospectionInterfaceType => type.kind === 'INTERFACE'
-
-export const isIntrospectionEnumType = (
-  type: IntrospectionSchema['types'][0]
-): type is IntrospectionEnumType => type.kind === 'ENUM'
-
-export const isIntrospectionUnionType = (
-  type: IntrospectionSchema['types'][0]
-): type is IntrospectionUnionType => type.kind === 'UNION'
+): type is IntrospectionListTypeRef => type.kind === TypeKind.LIST
 
 export const isNonNullIntrospectionType = (
   type: IntrospectionTypeRef
 ): type is IntrospectionNonNullTypeRef<
   IntrospectionNamedTypeRef<IntrospectionType>
-> => type.kind === 'NON_NULL'
+> => type.kind === TypeKind.NON_NULL
+
 export const isIntrospectionScalarType = (
   type: IntrospectionSchema['types'][0]
-): type is IntrospectionScalarType => type.kind === 'SCALAR'
+): type is IntrospectionScalarType => type.kind === TypeKind.SCALAR
+
+export const isIntrospectionObjectType = (
+  type: IntrospectionSchema['types'][0]
+): type is IntrospectionObjectType => type.kind === TypeKind.OBJECT
+
+export const isIntrospectionInputObjectType = (
+  type: IntrospectionSchema['types'][0]
+): type is IntrospectionInputObjectType => type.kind === TypeKind.INPUT_OBJECT
+
+export const isIntrospectionInterfaceType = (
+  type: IntrospectionSchema['types'][0]
+): type is IntrospectionInterfaceType => type.kind === TypeKind.INTERFACE
+
+export const isIntrospectionEnumType = (
+  type: IntrospectionSchema['types'][0]
+): type is IntrospectionEnumType => type.kind === TypeKind.ENUM
+
+export const isIntrospectionUnionType = (
+  type: IntrospectionSchema['types'][0]
+): type is IntrospectionUnionType => type.kind === TypeKind.UNION
 
 export const isIntrospectionDefaultScalarType = (
   type: IntrospectionSchema['types'][0]
 ): type is IntrospectionScalarType =>
-  type.kind === 'SCALAR' &&
+  type.kind === TypeKind.SCALAR &&
   includes(['Boolean', 'String', 'Int', 'Float'], type.name)
 
 // Ignore all GraphQL native Scalars, directives, etc...
@@ -85,12 +96,12 @@ export const filterDefinitionsTypes = (
   return filter(
     types,
     (type) =>
-      ((isIntrospectionObjectType(type) && !!type.fields) ||
+      ((isIntrospectionScalarType(type) && !!type.name) ||
+        (isIntrospectionObjectType(type) && !!type.fields) ||
         (isIntrospectionInputObjectType(type) && !!type.inputFields) ||
         (isIntrospectionInterfaceType(type) && !!type.fields) ||
         (isIntrospectionEnumType(type) && !!type.enumValues) ||
-        (isIntrospectionUnionType(type) && !!type.possibleTypes) ||
-        (isIntrospectionScalarType(type) && !!type.name)) &&
+        (isIntrospectionUnionType(type) && !!type.possibleTypes)) &&
       (!ignoreInternals || (ignoreInternals && !startsWith(type.name, '__')))
   )
 }

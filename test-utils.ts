@@ -111,6 +111,7 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
                 requiredColorsNonNullableWithDefault: [Color!]! = [GREEN, RED]
             ): Todo!
             todos: [Todo!]!
+            todoUnions: [TodoUnion]
             node(
               "Node identifier"
               id: String!
@@ -120,6 +121,7 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
         type Mutation {
             update_todo(id: String!, todo: TodoInputType!): Todo
             create_todo(todo: TodoInputType!): Todo
+            create_todo_union(id: String!): TodoUnion
         }
 `)
 
@@ -174,7 +176,10 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
 
                 color: { $ref: '#/definitions/Color' },
                 requiredColor: { $ref: '#/definitions/Color' },
-                requiredColorWithDefault: { $ref: '#/definitions/Color', default: 'RED' },
+                requiredColorWithDefault: {
+                  $ref: '#/definitions/Color',
+                  default: 'RED',
+                },
 
                 colors: {
                   type: 'array',
@@ -238,6 +243,23 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
           },
           required: [],
         },
+        todoUnions: {
+          type: 'object',
+          properties: {
+            arguments: {
+              type: 'object',
+              properties: {},
+              required: [],
+            },
+            return: {
+              type: 'array',
+              items: {
+                anyOf: [{ $ref: '#/definitions/TodoUnion' }, { type: 'null' }],
+              },
+            },
+          },
+          required: [],
+        },
         node: {
           type: 'object',
           properties: {
@@ -294,6 +316,22 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
             },
             return: {
               $ref: '#/definitions/Todo',
+            },
+          },
+          required: [],
+        },
+        create_todo_union: {
+          type: 'object',
+          properties: {
+            arguments: {
+              type: 'object',
+              properties: {
+                id: { $ref: '#/definitions/String' },
+              },
+              required: ['id'],
+            },
+            return: {
+              $ref: '#/definitions/TodoUnion',
             },
           },
           required: [],
@@ -523,7 +561,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
         color: { default: 'RED', $ref: '#/definitions/Color' },
         contactInfo: {
           $ref: '#/definitions/ContactInfoInputType',
-          default: { email: 'spam@example.dev' }
+          default: { email: 'spam@example.dev' },
         },
       },
       required: ['name'],
@@ -532,7 +570,7 @@ export const todoSchemaAsJsonSchema: JSONSchema6 = {
       type: 'object',
       description: 'Description of ContactInfoInputType.',
       properties: {
-        email: { $ref: "#/definitions/String" },
+        email: { $ref: '#/definitions/String' },
       },
       required: [],
     },
