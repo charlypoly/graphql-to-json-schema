@@ -14,7 +14,7 @@ const nativeScalarsToFilter = ['String', 'Int', 'Boolean']
 
 const readmeSDL: string = `
   type Todo {
-      id: String!
+      id: ID!
       name: String!
       completed: Boolean
       color: Color
@@ -26,7 +26,7 @@ const readmeSDL: string = `
   }
 
   type SimpleTodo {
-    id: String!
+    id: ID!
     name: String!
   }
 
@@ -48,7 +48,7 @@ const readmeSDL: string = `
   type Query {
       "A Query with 1 required argument and 1 optional argument"
       todo(
-        id: String!,
+        id: ID!,
         "A default value of false"
         isCompleted: Boolean=false
       ): Todo
@@ -68,7 +68,7 @@ const readmeSDL: string = `
 
       "A Mutation with 2 required arguments"
       update_todo(
-        id: String!,
+        id: ID!,
         data: TodoInputType!
       ): Todo!
 
