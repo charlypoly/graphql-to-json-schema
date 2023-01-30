@@ -20,7 +20,7 @@ import {
   isIntrospectionScalarType,
   isIntrospectionDefaultScalarType,
 } from './typeGuards'
-import { graphqlToJSONType, typesMapping } from './typesMapping'
+import { graphqlToJSONType, scalarNameToJsonType } from './typesMapping'
 
 export type JSONSchema6Acc = {
   [k: string]: JSONSchema6
@@ -199,7 +199,7 @@ export const introspectionTypeReducer: (
     }
   } else if (isIntrospectionDefaultScalarType(curr)) {
     acc[curr.name] = {
-      type: (typesMapping as any)[curr.name],
+      type: scalarNameToJsonType(curr.name),
       title: curr.name,
     }
   } else if (isIntrospectionScalarType(curr)) {

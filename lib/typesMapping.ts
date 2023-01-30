@@ -24,6 +24,10 @@ export const typesMapping: { [k in GraphQLTypeNames]: JSONSchema6TypeName } = {
   ID: 'string',
 }
 
+export const scalarNameToJsonType = (
+  scalarName: GraphQLTypeNames,
+) => typesMapping[scalarName]
+
 // Convert a GraphQL Type to a valid JSON Schema type
 export type GraphqlToJSONTypeArg =
   | IntrospectionTypeRef
@@ -59,7 +63,7 @@ export const graphqlToJSONType = (
     if (includes(SUPPORTED_KINDS, k.kind)) {
       jsonType.$ref = `#/definitions/${name}`
     } else {
-      jsonType.type = (typesMapping as any)[name]
+      jsonType.type = scalarNameToJsonType(name as GraphQLTypeNames)
     }
 
     // Only if the option allows for it, represent an array with nullable items
