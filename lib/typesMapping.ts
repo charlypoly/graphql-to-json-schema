@@ -16,7 +16,7 @@ import {
 
 import { GraphQLTypeNames, IDTypeMapping as IDTypeMappingType } from './types'
 
-const ID_TYPE_MAPPING_OPTION_DEFAULT = 'string' as IDTypeMappingType
+export const ID_TYPE_MAPPING_OPTION_DEFAULT = 'string' as IDTypeMappingType
 
 const ID_TYPES: {
   [k in IDTypeMappingType]: JSONSchema6TypeName | JSONSchema6TypeName[]

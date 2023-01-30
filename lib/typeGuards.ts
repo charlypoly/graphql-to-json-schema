@@ -19,6 +19,8 @@ import {
 } from 'graphql'
 import { filter, has, startsWith, includes } from 'lodash'
 
+export { ID_TYPE_MAPPING_OPTION_DEFAULT } from './typesMapping'
+
 export const SUPPORTED_SCALARS = Object.freeze([
   'Boolean',
   'String',

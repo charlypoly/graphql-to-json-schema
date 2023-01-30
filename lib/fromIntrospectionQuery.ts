@@ -2,7 +2,11 @@ import { IntrospectionQuery, IntrospectionType } from 'graphql'
 import { JSONSchema6 } from 'json-schema'
 import { includes, partition, reduce } from 'lodash'
 import { introspectionTypeReducer, JSONSchema6Acc } from './reducer'
-import { filterDefinitionsTypes, isIntrospectionObjectType } from './typeGuards'
+import {
+  ID_TYPE_MAPPING_OPTION_DEFAULT,
+  filterDefinitionsTypes,
+  isIntrospectionObjectType,
+} from './typeGuards'
 
 import type { IDTypeMapping as IDTypeMappingType } from './types'
 
@@ -29,7 +33,7 @@ export const fromIntrospectionQuery = (
     // Defaults
     ignoreInternals: true,
     nullableArrayItems: false,
-    idTypeMapping: 'string' as IDTypeMappingType,
+    idTypeMapping: ID_TYPE_MAPPING_OPTION_DEFAULT,
     // User-specified
     ...(opts || {}),
   }
