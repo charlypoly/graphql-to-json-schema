@@ -29,26 +29,25 @@ const possibleIdTypes: { [k in IDTypeMappingType]: JSONSchema6TypeName | JSONSch
   'number': 'number',
   'both': ['string', 'number'],
 }
-const ID_JSON_TYPE_DEFAULT = 'string'
+const ID_TYPE_MAPPING_OPTION_DEFAULT = 'string'
 
 export const typesMapping: { [k in GraphQLTypeNames]: JSONSchema6TypeName } = {
   Boolean: 'boolean',
   String: 'string',
   Int: 'number',
   Float: 'number',
-  ID: 'string',
+  ID: 'number',
+  // ID: undefined,
 }
 
 export const scalarNameToJsonType = (
   scalarName: GraphQLTypeNames,
   options: Option = {},
-) => {
-  console.log({options})
-  return Object.assign({}, typesMapping, {
-    ID: possibleIdTypes[(options.IDTypeMapping || 'string')]
+) => (
+  Object.assign({}, typesMapping, {
+    ID: possibleIdTypes[(options.IDTypeMapping || ID_TYPE_MAPPING_OPTION_DEFAULT)]
   })[scalarName]
-  // return typesMapping[scalarName]
-}
+)
 
 // Convert a GraphQL Type to a valid JSON Schema type
 export type GraphqlToJSONTypeArg =
