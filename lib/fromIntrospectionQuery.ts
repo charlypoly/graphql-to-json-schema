@@ -4,6 +4,10 @@ import { includes, partition, reduce } from 'lodash'
 import { introspectionTypeReducer, JSONSchema6Acc } from './reducer'
 import { filterDefinitionsTypes, isIntrospectionObjectType } from './typeGuards'
 
+import type {
+  IDTypeMapping as IDTypeMappingType,
+} from './types'
+
 // FIXME: finish this type
 export interface GraphQLJSONSchema6 extends JSONSchema6 {
   properties: {
@@ -16,6 +20,7 @@ export interface GraphQLJSONSchema6 extends JSONSchema6 {
 export interface FromIntrospectionQueryOptions {
   ignoreInternals?: boolean
   nullableArrayItems?: boolean
+  IDTypeMapping?: IDTypeMappingType,
 }
 
 export const fromIntrospectionQuery = (

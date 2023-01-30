@@ -14,7 +14,21 @@ import {
   isNonNullIntrospectionType,
 } from './typeGuards'
 
+import {
+  IDTypeMapping as IDTypeMappingType,
+} from './types'
+
 export type GraphQLTypeNames = 'String' | 'Int' | 'Float' | 'Boolean' | 'ID'
+
+type Option = {
+  IDTypeMapping?: IDTypeMappingType
+}
+const possibleIdTypes = {
+  'string': 'string',
+  'number': 'number',
+  'both': ['string', 'number'],
+}
+const ID_JSON_TYPE_DEFAULT = 'string'
 
 export const typesMapping: { [k in GraphQLTypeNames]: JSONSchema6TypeName } = {
   Boolean: 'boolean',
@@ -26,7 +40,14 @@ export const typesMapping: { [k in GraphQLTypeNames]: JSONSchema6TypeName } = {
 
 export const scalarNameToJsonType = (
   scalarName: GraphQLTypeNames,
-) => typesMapping[scalarName]
+  options: Option = {},
+) => {
+  console.log({options})
+  return Object.assign({}, typesMapping, {
+    ID: possibleIdTypes[(options.IDTypeMapping || 'string')]
+  })[scalarName]
+  // return typesMapping[scalarName]
+}
 
 // Convert a GraphQL Type to a valid JSON Schema type
 export type GraphqlToJSONTypeArg =
