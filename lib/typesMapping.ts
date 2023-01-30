@@ -23,7 +23,8 @@ export type GraphQLTypeNames = 'String' | 'Int' | 'Float' | 'Boolean' | 'ID'
 type Option = {
   IDTypeMapping?: IDTypeMappingType
 }
-const possibleIdTypes = {
+
+const possibleIdTypes: { [k in IDTypeMappingType]: JSONSchema6TypeName | JSONSchema6TypeName[] } = {
   'string': 'string',
   'number': 'number',
   'both': ['string', 'number'],
