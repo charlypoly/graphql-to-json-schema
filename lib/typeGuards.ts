@@ -82,7 +82,7 @@ export const isIntrospectionDefaultScalarType = (
   type: IntrospectionSchema['types'][0]
 ): type is IntrospectionScalarType =>
   type.kind === TypeKind.SCALAR &&
-  includes(['Boolean', 'String', 'Int', 'Float'], type.name)
+  includes(['Boolean', 'String', 'Int', 'Float', 'ID'], type.name)
 
 // Ignore all GraphQL native Scalars, directives, etc...
 export interface FilterDefinitionsTypesOptions {
