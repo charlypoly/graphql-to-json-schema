@@ -19,14 +19,22 @@ import {
 } from 'graphql'
 import { filter, has, startsWith, includes } from 'lodash'
 
-export const SUPPORTED_KINDS = [
+export const SUPPORTED_SCALARS = Object.freeze([
+  'Boolean',
+  'String',
+  'Int',
+  'Float',
+  'ID',
+])
+
+export const SUPPORTED_KINDS = Object.freeze([
   TypeKind.SCALAR,
   TypeKind.OBJECT,
   TypeKind.INPUT_OBJECT,
   TypeKind.INTERFACE,
   TypeKind.ENUM,
   TypeKind.UNION,
-]
+])
 
 ///////////////////
 /// Type guards ///
@@ -82,7 +90,7 @@ export const isIntrospectionDefaultScalarType = (
   type: IntrospectionSchema['types'][0]
 ): type is IntrospectionScalarType =>
   type.kind === TypeKind.SCALAR &&
-  includes(['Boolean', 'String', 'Int', 'Float', 'ID'], type.name)
+  includes(SUPPORTED_SCALARS, type.name)
 
 // Ignore all GraphQL native Scalars, directives, etc...
 export interface FilterDefinitionsTypesOptions {

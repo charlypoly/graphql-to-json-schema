@@ -20,14 +20,19 @@ import {
   isIntrospectionScalarType,
   isIntrospectionDefaultScalarType,
 } from './typeGuards'
-import { graphqlToJSONType, scalarNameToJsonType } from './typesMapping'
+import { graphqlToJSONType, setIdTypeMapping, typesMapping } from './typesMapping'
+
+import type {
+  IDTypeMapping as IDTypeMappingType,
+} from './types'
 
 export type JSONSchema6Acc = {
   [k: string]: JSONSchema6
 }
 
 type ReducerOptions = {
-  nullableArrayItems?: boolean
+  nullableArrayItems?: boolean,
+  IDTypeMapping?: IDTypeMappingType
 }
 
 type GetRequiredFieldsType = ReadonlyArray<
@@ -59,6 +64,10 @@ export const introspectionFieldReducerGenerator: (
   JSONSchema6Acc,
   ReadonlyArray<IntrospectionFieldReducerItem>
 > = (options) => {
+
+  // Set the ID Type Mapping if the User has provided it
+  setIdTypeMapping(options.IDTypeMapping)
+
   // reducer for a types and inputs
   const introspectionFieldReducer: MemoListIterator<
     IntrospectionFieldReducerItem,
@@ -199,7 +208,7 @@ export const introspectionTypeReducer: (
     }
   } else if (isIntrospectionDefaultScalarType(curr)) {
     acc[curr.name] = {
-      type: scalarNameToJsonType(curr.name),
+      type: (typesMapping as any)[curr.name],
       title: curr.name,
     }
   } else if (isIntrospectionScalarType(curr)) {

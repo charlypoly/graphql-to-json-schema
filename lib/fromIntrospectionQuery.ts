@@ -31,6 +31,7 @@ export const fromIntrospectionQuery = (
     // Defaults
     ignoreInternals: true,
     nullableArrayItems: false,
+    IDTypeMapping: 'string' as IDTypeMappingType,
     // User-specified
     ...(opts || {}),
   }
