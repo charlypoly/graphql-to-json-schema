@@ -14,31 +14,35 @@ import {
   isNonNullIntrospectionType,
 } from './typeGuards'
 
-import {
-  IDTypeMapping as IDTypeMappingType,
-} from './types'
+import { GraphQLTypeNames, IDTypeMapping as IDTypeMappingType } from './types'
 
-export type GraphQLTypeNames = 'String' | 'Int' | 'Float' | 'Boolean' | 'ID'
+const ID_TYPE_MAPPING_OPTION_DEFAULT = 'string' as IDTypeMappingType
 
-const possibleIdTypes: { [k in IDTypeMappingType]: JSONSchema6TypeName | JSONSchema6TypeName[] } = {
-  'string': 'string',
-  'number': 'number',
-  'both': ['string', 'number'],
+const ID_TYPES: {
+  [k in IDTypeMappingType]: JSONSchema6TypeName | JSONSchema6TypeName[]
+} = {
+  string: 'string',
+  number: 'number',
+  both: ['string', 'number'],
 }
 
-
-export const typesMapping: { [k in GraphQLTypeNames]: JSONSchema6TypeName | JSONSchema6TypeName[] } = {
+const SCALAR_TO_JSON: {
+  [k in GraphQLTypeNames]: JSONSchema6TypeName | JSONSchema6TypeName[]
+} = {
   Boolean: 'boolean',
   String: 'string',
   Int: 'number',
   Float: 'number',
-  ID: 'string',
+  ID: ID_TYPES[ID_TYPE_MAPPING_OPTION_DEFAULT],
 }
 
-const ID_TYPE_MAPPING_OPTION_DEFAULT = 'string'
-export const setIdTypeMapping = (optionValue?: IDTypeMappingType) => {
-  typesMapping.ID = possibleIdTypes[(optionValue || ID_TYPE_MAPPING_OPTION_DEFAULT)]
-}
+export const scalarToJsonType = (
+  scalarName: GraphQLTypeNames,
+  options: GraphqlToJSONTypeOptions = {}
+): JSONSchema6TypeName | JSONSchema6TypeName[] =>
+  Object.assign({}, SCALAR_TO_JSON, {
+    ID: ID_TYPES[options.idTypeMapping || ID_TYPE_MAPPING_OPTION_DEFAULT],
+  })[scalarName]
 
 // Convert a GraphQL Type to a valid JSON Schema type
 export type GraphqlToJSONTypeArg =
@@ -50,6 +54,7 @@ export type GraphqlToJSONTypeOptions = {
   nullableArrayItems?: boolean
   isArray?: boolean
   isNonNull?: boolean
+  idTypeMapping?: IDTypeMappingType
 }
 
 export const graphqlToJSONType = (
@@ -75,7 +80,7 @@ export const graphqlToJSONType = (
     if (includes(SUPPORTED_KINDS, k.kind)) {
       jsonType.$ref = `#/definitions/${name}`
     } else {
-      jsonType.type = typesMapping[(name as GraphQLTypeNames)]
+      jsonType.type = scalarToJsonType(name as GraphQLTypeNames, options)
     }
 
     // Only if the option allows for it, represent an array with nullable items

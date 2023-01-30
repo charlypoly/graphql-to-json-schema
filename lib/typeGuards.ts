@@ -89,8 +89,7 @@ export const isIntrospectionUnionType = (
 export const isIntrospectionDefaultScalarType = (
   type: IntrospectionSchema['types'][0]
 ): type is IntrospectionScalarType =>
-  type.kind === TypeKind.SCALAR &&
-  includes(SUPPORTED_SCALARS, type.name)
+  type.kind === TypeKind.SCALAR && includes(SUPPORTED_SCALARS, type.name)
 
 // Ignore all GraphQL native Scalars, directives, etc...
 export interface FilterDefinitionsTypesOptions {
