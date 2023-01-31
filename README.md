@@ -28,7 +28,10 @@ const options = {
   // Defaults to `false` for backwards compatibility, but in future versions
   // the effect of `true` is likely going to be the default and only way. It is
   // highly recommended that new implementations set this value to `true`.
-  nullableArrayItems: true
+  nullableArrayItems: true,
+  // Indicates how to define the `ID` scalar as part of a JSON Schema. Valid options
+  // are `string`, `number`, or `both`. Defaults to `string`
+  idTypeMapping: 'string'
 }
 
 // schema is your GraphQL schema.
@@ -43,7 +46,7 @@ const jsonSchema = fromIntrospectionQuery(introspection, options);
 
 ```graphql
   type Todo {
-      id: String!
+      id: ID!
       name: String!
       completed: Boolean
       color: Color
@@ -55,7 +58,7 @@ const jsonSchema = fromIntrospectionQuery(introspection, options);
   }
 
   type SimpleTodo {
-    id: String!
+    id: ID!
     name: String!
   }
 
@@ -77,7 +80,7 @@ const jsonSchema = fromIntrospectionQuery(introspection, options);
   type Query {
       "A Query with 1 required argument and 1 optional argument"
       todo(
-        id: String!,
+        id: ID!,
         "A default value of false"
         isCompleted: Boolean=false
       ): Todo
@@ -97,7 +100,7 @@ const jsonSchema = fromIntrospectionQuery(introspection, options);
 
       "A Mutation with 2 required arguments"
       update_todo(
-        id: String!,
+        id: ID!,
         data: TodoInputType!
       ): Todo!
 
@@ -129,7 +132,7 @@ const options = { nullableArrayItems: true }
             arguments: {
               type: 'object',
               properties: {
-                id: { '$ref': '#/definitions/String' },
+                id: { '$ref': '#/definitions/ID' },
                 isCompleted: {
                   description: 'A default value of false',
                   '$ref': '#/definitions/Boolean',
@@ -192,7 +195,7 @@ const options = { nullableArrayItems: true }
             arguments: {
               type: 'object',
               properties: {
-                id: { '$ref': '#/definitions/String' },
+                id: { '$ref': '#/definitions/ID' },
                 data: { '$ref': '#/definitions/TodoInputType' }
               },
               required: [ 'id', 'data' ]
@@ -235,7 +238,7 @@ const options = { nullableArrayItems: true }
         id: {
           type: 'object',
           properties: {
-            return: { '$ref': '#/definitions/String' },
+            return: { '$ref': '#/definitions/ID' },
             arguments: { type: 'object', properties: {}, required: [] }
           },
           required: []
@@ -285,13 +288,18 @@ const options = { nullableArrayItems: true }
       },
       required: [ 'id', 'name', 'colors' ]
     },
+    ID: {
+      description: 'The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.',
+      type: 'string',
+      title: 'ID'
+    },
     SimpleTodo: {
       type: 'object',
       properties: {
         id: {
           type: 'object',
           properties: {
-            return: { '$ref': '#/definitions/String' },
+            return: { '$ref': '#/definitions/ID' },
             arguments: { type: 'object', properties: {}, required: [] }
           },
           required: []

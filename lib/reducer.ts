@@ -20,7 +20,12 @@ import {
   isIntrospectionScalarType,
   isIntrospectionDefaultScalarType,
 } from './typeGuards'
-import { graphqlToJSONType, typesMapping } from './typesMapping'
+import { graphqlToJSONType, scalarToJsonType } from './typesMapping'
+
+import type {
+  GraphQLTypeNames,
+  IDTypeMapping as IDTypeMappingType,
+} from './types'
 
 export type JSONSchema6Acc = {
   [k: string]: JSONSchema6
@@ -28,6 +33,7 @@ export type JSONSchema6Acc = {
 
 type ReducerOptions = {
   nullableArrayItems?: boolean
+  idTypeMapping?: IDTypeMappingType
 }
 
 type GetRequiredFieldsType = ReadonlyArray<
@@ -199,7 +205,7 @@ export const introspectionTypeReducer: (
     }
   } else if (isIntrospectionDefaultScalarType(curr)) {
     acc[curr.name] = {
-      type: (typesMapping as any)[curr.name],
+      type: scalarToJsonType(curr.name as GraphQLTypeNames, options),
       title: curr.name,
     }
   } else if (isIntrospectionScalarType(curr)) {

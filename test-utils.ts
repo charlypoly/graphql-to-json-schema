@@ -49,7 +49,7 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
 
         "A simpler ToDo Object"
         type SimpleTodo {
-          id: String!
+          id: ID!
           name: String!
         }
 
@@ -133,475 +133,10 @@ export const getTodoSchemaIntrospection = (): GetTodoSchemaIntrospectionResult =
   }
 }
 
-export const todoSchemaAsJsonSchema: JSONSchema6 = {
-  $schema: 'http://json-schema.org/draft-06/schema#',
-  properties: {
-    Query: {
-      type: 'object',
-      properties: {
-        todo: {
-          type: 'object',
-          properties: {
-            arguments: {
-              type: 'object',
-              properties: {
-                id: {
-                  $ref: '#/definitions/String',
-                  description: 'todo identifier',
-                },
-                isCompleted: { $ref: '#/definitions/Boolean', default: false },
-                requiredNonNullStrings: {
-                  type: 'array',
-                  items: { $ref: '#/definitions/String' },
-                },
-                optionalNonNullStrings: {
-                  type: 'array',
-                  items: {
-                    $ref: '#/definitions/String',
-                  },
-                },
-                requiredNullableStrings: {
-                  type: 'array',
-                  items: {
-                    anyOf: [{ $ref: '#/definitions/String' }, { type: 'null' }],
-                  },
-                },
-                optionalNullableStringsWithDefault: {
-                  type: 'array',
-                  items: {
-                    anyOf: [{ $ref: '#/definitions/String' }, { type: 'null' }],
-                  },
-                  default: ['foo'],
-                },
-
-                color: { $ref: '#/definitions/Color' },
-                requiredColor: { $ref: '#/definitions/Color' },
-                requiredColorWithDefault: {
-                  $ref: '#/definitions/Color',
-                  default: 'RED',
-                },
-
-                colors: {
-                  type: 'array',
-                  items: {
-                    anyOf: [{ $ref: '#/definitions/Color' }, { type: 'null' }],
-                  },
-                },
-                requiredColors: {
-                  type: 'array',
-                  items: {
-                    anyOf: [{ $ref: '#/definitions/Color' }, { type: 'null' }],
-                  },
-                },
-                requiredColorsNonNullable: {
-                  type: 'array',
-                  items: { $ref: '#/definitions/Color' },
-                },
-                requiredColorsWithDefault: {
-                  type: 'array',
-                  items: {
-                    anyOf: [{ $ref: '#/definitions/Color' }, { type: 'null' }],
-                  },
-                  default: ['GREEN', 'RED'],
-                },
-                requiredColorsNonNullableWithDefault: {
-                  type: 'array',
-                  items: { $ref: '#/definitions/Color' },
-                  default: ['GREEN', 'RED'],
-                },
-              },
-              required: [
-                'id',
-                'requiredNonNullStrings',
-                'requiredNullableStrings',
-                'requiredColor',
-                'requiredColorWithDefault',
-                'requiredColors',
-                'requiredColorsNonNullable',
-                'requiredColorsWithDefault',
-                'requiredColorsNonNullableWithDefault',
-              ],
-            },
-            return: {
-              $ref: '#/definitions/Todo',
-            },
-          },
-          required: [],
-        },
-        todos: {
-          type: 'object',
-          properties: {
-            arguments: {
-              type: 'object',
-              properties: {},
-              required: [],
-            },
-            return: {
-              type: 'array',
-              items: { $ref: '#/definitions/Todo' },
-            },
-          },
-          required: [],
-        },
-        todoUnions: {
-          type: 'object',
-          properties: {
-            arguments: {
-              type: 'object',
-              properties: {},
-              required: [],
-            },
-            return: {
-              type: 'array',
-              items: {
-                anyOf: [{ $ref: '#/definitions/TodoUnion' }, { type: 'null' }],
-              },
-            },
-          },
-          required: [],
-        },
-        node: {
-          type: 'object',
-          properties: {
-            arguments: {
-              type: 'object',
-              properties: {
-                id: {
-                  description: 'Node identifier',
-                  $ref: '#/definitions/String',
-                },
-              },
-              required: ['id'],
-            },
-            return: {
-              $ref: '#/definitions/Node',
-            },
-          },
-          required: [],
-        },
-      },
-      // Inappropriate for individual queries to be required, despite possibly having
-      // NON_NULL return types
-      required: [],
-    },
-    Mutation: {
-      type: 'object',
-      properties: {
-        update_todo: {
-          type: 'object',
-          properties: {
-            arguments: {
-              type: 'object',
-              properties: {
-                id: { $ref: '#/definitions/String' },
-                todo: { $ref: '#/definitions/TodoInputType' },
-              },
-              required: ['id', 'todo'],
-            },
-            return: {
-              $ref: '#/definitions/Todo',
-            },
-          },
-          required: [],
-        },
-        create_todo: {
-          type: 'object',
-          properties: {
-            arguments: {
-              type: 'object',
-              properties: {
-                todo: { $ref: '#/definitions/TodoInputType' },
-              },
-              required: ['todo'],
-            },
-            return: {
-              $ref: '#/definitions/Todo',
-            },
-          },
-          required: [],
-        },
-        create_todo_union: {
-          type: 'object',
-          properties: {
-            arguments: {
-              type: 'object',
-              properties: {
-                id: { $ref: '#/definitions/String' },
-              },
-              required: ['id'],
-            },
-            return: {
-              $ref: '#/definitions/TodoUnion',
-            },
-          },
-          required: [],
-        },
-      },
-      // Inappropriate for individual mutations to be required, despite possibly having
-      // NON_NULL return types
-      required: [],
-    },
-  },
-  definitions: {
-    Boolean: {
-      type: 'boolean',
-      title: 'Boolean',
-      description: 'The `Boolean` scalar type represents `true` or `false`.',
-    },
-    String: {
-      type: 'string',
-      title: 'String',
-      description:
-        'The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.',
-    },
-    Todo: {
-      type: 'object',
-      description: 'A ToDo Object',
-      properties: {
-        id: {
-          description: 'A unique identifier',
-          type: 'object',
-          properties: {
-            return: { $ref: '#/definitions/String' },
-            arguments: { type: 'object', properties: {}, required: [] },
-          },
-          required: [],
-        },
-        name: {
-          type: 'object',
-          properties: {
-            return: { $ref: '#/definitions/String' },
-            arguments: { type: 'object', properties: {}, required: [] },
-          },
-          required: [],
-        },
-        completed: {
-          type: 'object',
-          properties: {
-            return: { $ref: '#/definitions/Boolean' },
-            arguments: { type: 'object', properties: {}, required: [] },
-          },
-          required: [],
-        },
-        color: {
-          type: 'object',
-          properties: {
-            return: { $ref: '#/definitions/Color' },
-            arguments: { type: 'object', properties: {}, required: [] },
-          },
-          required: [],
-        },
-        requiredColors: {
-          description:
-            'A required list containing colors that cannot contain nulls',
-          type: 'object',
-          properties: {
-            return: {
-              type: 'array',
-              items: { $ref: '#/definitions/Color' },
-            },
-            arguments: { type: 'object', properties: {}, required: [] },
-          },
-          required: [],
-        },
-        optionalColors: {
-          description:
-            'A non-required list containing colors that cannot contain nulls',
-          type: 'object',
-          properties: {
-            return: {
-              type: 'array',
-              items: { $ref: '#/definitions/Color' },
-            },
-            arguments: { type: 'object', properties: {}, required: [] },
-          },
-          required: [],
-        },
-        fieldWithOptionalArgument: {
-          type: 'object',
-          properties: {
-            return: {
-              type: 'array',
-              items: { $ref: '#/definitions/String' },
-            },
-            arguments: {
-              type: 'object',
-              properties: {
-                optionalFilter: {
-                  type: 'array',
-                  items: { $ref: '#/definitions/String' },
-                },
-              },
-              required: [],
-            },
-          },
-          required: [],
-        },
-        fieldWithRequiredArgument: {
-          type: 'object',
-          properties: {
-            return: {
-              type: 'array',
-              items: { $ref: '#/definitions/String' },
-            },
-            arguments: {
-              type: 'object',
-              properties: {
-                requiredFilter: {
-                  type: 'array',
-                  items: { $ref: '#/definitions/String' },
-                },
-              },
-              required: ['requiredFilter'],
-            },
-          },
-          required: [],
-        },
-        nullableFieldThatReturnsListOfNonNullStrings: {
-          type: 'object',
-          properties: {
-            return: {
-              type: 'array',
-              items: { $ref: '#/definitions/String' },
-            },
-            arguments: {
-              type: 'object',
-              properties: {
-                nonRequiredArgumentOfNullableStrings: {
-                  type: 'array',
-                  items: {
-                    anyOf: [{ $ref: '#/definitions/String' }, { type: 'null' }],
-                  },
-                },
-                nonRequiredArgumentOfNonNullableStrings: {
-                  type: 'array',
-                  items: { $ref: '#/definitions/String' },
-                },
-                requiredArgumentOfNullableStrings: {
-                  type: 'array',
-                  items: {
-                    anyOf: [{ $ref: '#/definitions/String' }, { type: 'null' }],
-                  },
-                },
-                requiredArgumentOfNonNullableStrings: {
-                  type: 'array',
-                  items: { $ref: '#/definitions/String' },
-                },
-              },
-              required: [
-                'requiredArgumentOfNullableStrings',
-                'requiredArgumentOfNonNullableStrings',
-              ],
-            },
-          },
-          required: [],
-        },
-        nullableFieldThatReturnsListOfNullableStrings: {
-          type: 'object',
-          properties: {
-            return: {
-              type: 'array',
-              items: {
-                anyOf: [{ $ref: '#/definitions/String' }, { type: 'null' }],
-              },
-            },
-            arguments: { type: 'object', properties: {}, required: [] },
-          },
-          required: [],
-        },
-      },
-      required: ['id', 'name', 'requiredColors'],
-    },
-    SimpleTodo: {
-      type: 'object',
-      description: 'A simpler ToDo Object',
-      properties: {
-        id: {
-          type: 'object',
-          properties: {
-            return: { $ref: '#/definitions/String' },
-            arguments: { type: 'object', properties: {}, required: [] },
-          },
-          required: [],
-        },
-        name: {
-          type: 'object',
-          properties: {
-            return: { $ref: '#/definitions/String' },
-            arguments: { type: 'object', properties: {}, required: [] },
-          },
-          required: [],
-        },
-      },
-      required: ['id', 'name'],
-    },
-    Color: {
-      // Yes, ENUM types should be the JSON built-in "string" type
-      type: 'string',
-      anyOf: [
-        {
-          enum: ['RED'],
-          title: 'Red color',
-          description: 'Red color',
-        },
-        {
-          enum: ['GREEN'],
-          title: 'Green color',
-          description: 'Green color',
-        },
-      ],
-    },
-    TodoInputType: {
-      type: 'object',
-      description:
-        'A type that describes ToDoInputType. Its description might not\nfit within the bounds of 80 width and so you want MULTILINE',
-      properties: {
-        name: { $ref: '#/definitions/String' },
-        completed: { $ref: '#/definitions/Boolean' },
-        color: { default: 'RED', $ref: '#/definitions/Color' },
-        contactInfo: {
-          $ref: '#/definitions/ContactInfoInputType',
-          default: { email: 'spam@example.dev' },
-        },
-      },
-      required: ['name'],
-    },
-    ContactInfoInputType: {
-      type: 'object',
-      description: 'Description of ContactInfoInputType.',
-      properties: {
-        email: { $ref: '#/definitions/String' },
-      },
-      required: [],
-    },
-    TodoUnion: {
-      description: 'A Union of Todo and SimpleTodo',
-      oneOf: [
-        { $ref: '#/definitions/Todo' },
-        { $ref: '#/definitions/SimpleTodo' },
-      ],
-    },
-    Node: {
-      type: 'object',
-      description: 'Anything with an ID can be a node',
-      properties: {
-        id: {
-          type: 'object',
-          description: 'A unique identifier',
-          properties: {
-            return: { $ref: '#/definitions/String' },
-            arguments: { type: 'object', properties: {}, required: [] },
-          },
-          required: [],
-        },
-      },
-      required: ['id'],
-    },
-  },
-}
+export const todoSchemaAsJsonSchema: JSONSchema6 = generateBaseSchema()
 
 export const todoSchemaAsJsonSchemaWithoutNullableArrayItems: JSONSchema6 = cloneDeepWith(
-  todoSchemaAsJsonSchema,
+  generateBaseSchema(),
   (value, key, object, stack) => {
     // Convert the new way back to the old way
     if (
@@ -614,3 +149,523 @@ export const todoSchemaAsJsonSchemaWithoutNullableArrayItems: JSONSchema6 = clon
     }
   }
 )
+
+export const todoSchemaAsJsonSchemaWithIdTypeNumber: JSONSchema6 = cloneDeepWith(
+  generateBaseSchema(),
+  (value, key, object, stack) => {
+    if (key === 'type' && object?.title === 'ID') {
+      return 'number'
+    }
+  }
+)
+
+export const todoSchemaAsJsonSchemaWithIdTypeStringOrNumber: JSONSchema6 = cloneDeepWith(
+  generateBaseSchema(),
+  (value, key, object, stack) => {
+    if (key === 'type' && object?.title === 'ID') {
+      return ['string', 'number']
+    }
+  }
+)
+
+function generateBaseSchema() {
+  return {
+    $schema: 'http://json-schema.org/draft-06/schema#',
+    properties: {
+      Query: {
+        type: 'object',
+        properties: {
+          todo: {
+            type: 'object',
+            properties: {
+              arguments: {
+                type: 'object',
+                properties: {
+                  id: {
+                    $ref: '#/definitions/String',
+                    description: 'todo identifier',
+                  },
+                  isCompleted: {
+                    $ref: '#/definitions/Boolean',
+                    default: false,
+                  },
+                  requiredNonNullStrings: {
+                    type: 'array',
+                    items: { $ref: '#/definitions/String' },
+                  },
+                  optionalNonNullStrings: {
+                    type: 'array',
+                    items: {
+                      $ref: '#/definitions/String',
+                    },
+                  },
+                  requiredNullableStrings: {
+                    type: 'array',
+                    items: {
+                      anyOf: [
+                        { $ref: '#/definitions/String' },
+                        { type: 'null' },
+                      ],
+                    },
+                  },
+                  optionalNullableStringsWithDefault: {
+                    type: 'array',
+                    items: {
+                      anyOf: [
+                        { $ref: '#/definitions/String' },
+                        { type: 'null' },
+                      ],
+                    },
+                    default: ['foo'],
+                  },
+
+                  color: { $ref: '#/definitions/Color' },
+                  requiredColor: { $ref: '#/definitions/Color' },
+                  requiredColorWithDefault: {
+                    $ref: '#/definitions/Color',
+                    default: 'RED',
+                  },
+
+                  colors: {
+                    type: 'array',
+                    items: {
+                      anyOf: [
+                        { $ref: '#/definitions/Color' },
+                        { type: 'null' },
+                      ],
+                    },
+                  },
+                  requiredColors: {
+                    type: 'array',
+                    items: {
+                      anyOf: [
+                        { $ref: '#/definitions/Color' },
+                        { type: 'null' },
+                      ],
+                    },
+                  },
+                  requiredColorsNonNullable: {
+                    type: 'array',
+                    items: { $ref: '#/definitions/Color' },
+                  },
+                  requiredColorsWithDefault: {
+                    type: 'array',
+                    items: {
+                      anyOf: [
+                        { $ref: '#/definitions/Color' },
+                        { type: 'null' },
+                      ],
+                    },
+                    default: ['GREEN', 'RED'],
+                  },
+                  requiredColorsNonNullableWithDefault: {
+                    type: 'array',
+                    items: { $ref: '#/definitions/Color' },
+                    default: ['GREEN', 'RED'],
+                  },
+                },
+                required: [
+                  'id',
+                  'requiredNonNullStrings',
+                  'requiredNullableStrings',
+                  'requiredColor',
+                  'requiredColorWithDefault',
+                  'requiredColors',
+                  'requiredColorsNonNullable',
+                  'requiredColorsWithDefault',
+                  'requiredColorsNonNullableWithDefault',
+                ],
+              },
+              return: {
+                $ref: '#/definitions/Todo',
+              },
+            },
+            required: [],
+          },
+          todos: {
+            type: 'object',
+            properties: {
+              arguments: {
+                type: 'object',
+                properties: {},
+                required: [],
+              },
+              return: {
+                type: 'array',
+                items: { $ref: '#/definitions/Todo' },
+              },
+            },
+            required: [],
+          },
+          todoUnions: {
+            type: 'object',
+            properties: {
+              arguments: {
+                type: 'object',
+                properties: {},
+                required: [],
+              },
+              return: {
+                type: 'array',
+                items: {
+                  anyOf: [
+                    { $ref: '#/definitions/TodoUnion' },
+                    { type: 'null' },
+                  ],
+                },
+              },
+            },
+            required: [],
+          },
+          node: {
+            type: 'object',
+            properties: {
+              arguments: {
+                type: 'object',
+                properties: {
+                  id: {
+                    description: 'Node identifier',
+                    $ref: '#/definitions/String',
+                  },
+                },
+                required: ['id'],
+              },
+              return: {
+                $ref: '#/definitions/Node',
+              },
+            },
+            required: [],
+          },
+        },
+        // Inappropriate for individual queries to be required, despite possibly having
+        // NON_NULL return types
+        required: [],
+      },
+      Mutation: {
+        type: 'object',
+        properties: {
+          update_todo: {
+            type: 'object',
+            properties: {
+              arguments: {
+                type: 'object',
+                properties: {
+                  id: { $ref: '#/definitions/String' },
+                  todo: { $ref: '#/definitions/TodoInputType' },
+                },
+                required: ['id', 'todo'],
+              },
+              return: {
+                $ref: '#/definitions/Todo',
+              },
+            },
+            required: [],
+          },
+          create_todo: {
+            type: 'object',
+            properties: {
+              arguments: {
+                type: 'object',
+                properties: {
+                  todo: { $ref: '#/definitions/TodoInputType' },
+                },
+                required: ['todo'],
+              },
+              return: {
+                $ref: '#/definitions/Todo',
+              },
+            },
+            required: [],
+          },
+          create_todo_union: {
+            type: 'object',
+            properties: {
+              arguments: {
+                type: 'object',
+                properties: {
+                  id: { $ref: '#/definitions/String' },
+                },
+                required: ['id'],
+              },
+              return: {
+                $ref: '#/definitions/TodoUnion',
+              },
+            },
+            required: [],
+          },
+        },
+        // Inappropriate for individual mutations to be required, despite possibly having
+        // NON_NULL return types
+        required: [],
+      },
+    },
+    definitions: {
+      ID: {
+        type: 'string',
+        title: 'ID',
+        description:
+          'The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.',
+      },
+      Boolean: {
+        type: 'boolean',
+        title: 'Boolean',
+        description: 'The `Boolean` scalar type represents `true` or `false`.',
+      },
+      String: {
+        type: 'string',
+        title: 'String',
+        description:
+          'The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.',
+      },
+      Todo: {
+        type: 'object',
+        description: 'A ToDo Object',
+        properties: {
+          id: {
+            description: 'A unique identifier',
+            type: 'object',
+            properties: {
+              return: { $ref: '#/definitions/String' },
+              arguments: { type: 'object', properties: {}, required: [] },
+            },
+            required: [],
+          },
+          name: {
+            type: 'object',
+            properties: {
+              return: { $ref: '#/definitions/String' },
+              arguments: { type: 'object', properties: {}, required: [] },
+            },
+            required: [],
+          },
+          completed: {
+            type: 'object',
+            properties: {
+              return: { $ref: '#/definitions/Boolean' },
+              arguments: { type: 'object', properties: {}, required: [] },
+            },
+            required: [],
+          },
+          color: {
+            type: 'object',
+            properties: {
+              return: { $ref: '#/definitions/Color' },
+              arguments: { type: 'object', properties: {}, required: [] },
+            },
+            required: [],
+          },
+          requiredColors: {
+            description:
+              'A required list containing colors that cannot contain nulls',
+            type: 'object',
+            properties: {
+              return: {
+                type: 'array',
+                items: { $ref: '#/definitions/Color' },
+              },
+              arguments: { type: 'object', properties: {}, required: [] },
+            },
+            required: [],
+          },
+          optionalColors: {
+            description:
+              'A non-required list containing colors that cannot contain nulls',
+            type: 'object',
+            properties: {
+              return: {
+                type: 'array',
+                items: { $ref: '#/definitions/Color' },
+              },
+              arguments: { type: 'object', properties: {}, required: [] },
+            },
+            required: [],
+          },
+          fieldWithOptionalArgument: {
+            type: 'object',
+            properties: {
+              return: {
+                type: 'array',
+                items: { $ref: '#/definitions/String' },
+              },
+              arguments: {
+                type: 'object',
+                properties: {
+                  optionalFilter: {
+                    type: 'array',
+                    items: { $ref: '#/definitions/String' },
+                  },
+                },
+                required: [],
+              },
+            },
+            required: [],
+          },
+          fieldWithRequiredArgument: {
+            type: 'object',
+            properties: {
+              return: {
+                type: 'array',
+                items: { $ref: '#/definitions/String' },
+              },
+              arguments: {
+                type: 'object',
+                properties: {
+                  requiredFilter: {
+                    type: 'array',
+                    items: { $ref: '#/definitions/String' },
+                  },
+                },
+                required: ['requiredFilter'],
+              },
+            },
+            required: [],
+          },
+          nullableFieldThatReturnsListOfNonNullStrings: {
+            type: 'object',
+            properties: {
+              return: {
+                type: 'array',
+                items: { $ref: '#/definitions/String' },
+              },
+              arguments: {
+                type: 'object',
+                properties: {
+                  nonRequiredArgumentOfNullableStrings: {
+                    type: 'array',
+                    items: {
+                      anyOf: [
+                        { $ref: '#/definitions/String' },
+                        { type: 'null' },
+                      ],
+                    },
+                  },
+                  nonRequiredArgumentOfNonNullableStrings: {
+                    type: 'array',
+                    items: { $ref: '#/definitions/String' },
+                  },
+                  requiredArgumentOfNullableStrings: {
+                    type: 'array',
+                    items: {
+                      anyOf: [
+                        { $ref: '#/definitions/String' },
+                        { type: 'null' },
+                      ],
+                    },
+                  },
+                  requiredArgumentOfNonNullableStrings: {
+                    type: 'array',
+                    items: { $ref: '#/definitions/String' },
+                  },
+                },
+                required: [
+                  'requiredArgumentOfNullableStrings',
+                  'requiredArgumentOfNonNullableStrings',
+                ],
+              },
+            },
+            required: [],
+          },
+          nullableFieldThatReturnsListOfNullableStrings: {
+            type: 'object',
+            properties: {
+              return: {
+                type: 'array',
+                items: {
+                  anyOf: [{ $ref: '#/definitions/String' }, { type: 'null' }],
+                },
+              },
+              arguments: { type: 'object', properties: {}, required: [] },
+            },
+            required: [],
+          },
+        },
+        required: ['id', 'name', 'requiredColors'],
+      },
+      SimpleTodo: {
+        type: 'object',
+        description: 'A simpler ToDo Object',
+        properties: {
+          id: {
+            type: 'object',
+            properties: {
+              return: { $ref: '#/definitions/ID' },
+              arguments: { type: 'object', properties: {}, required: [] },
+            },
+            required: [],
+          },
+          name: {
+            type: 'object',
+            properties: {
+              return: { $ref: '#/definitions/String' },
+              arguments: { type: 'object', properties: {}, required: [] },
+            },
+            required: [],
+          },
+        },
+        required: ['id', 'name'],
+      },
+      Color: {
+        // Yes, ENUM types should be the JSON built-in "string" type
+        type: 'string',
+        anyOf: [
+          {
+            enum: ['RED'],
+            title: 'Red color',
+            description: 'Red color',
+          },
+          {
+            enum: ['GREEN'],
+            title: 'Green color',
+            description: 'Green color',
+          },
+        ],
+      },
+      TodoInputType: {
+        type: 'object',
+        description:
+          'A type that describes ToDoInputType. Its description might not\nfit within the bounds of 80 width and so you want MULTILINE',
+        properties: {
+          name: { $ref: '#/definitions/String' },
+          completed: { $ref: '#/definitions/Boolean' },
+          color: { default: 'RED', $ref: '#/definitions/Color' },
+          contactInfo: {
+            $ref: '#/definitions/ContactInfoInputType',
+            default: { email: 'spam@example.dev' },
+          },
+        },
+        required: ['name'],
+      },
+      ContactInfoInputType: {
+        type: 'object',
+        description: 'Description of ContactInfoInputType.',
+        properties: {
+          email: { $ref: '#/definitions/String' },
+        },
+        required: [],
+      },
+      TodoUnion: {
+        description: 'A Union of Todo and SimpleTodo',
+        oneOf: [
+          { $ref: '#/definitions/Todo' },
+          { $ref: '#/definitions/SimpleTodo' },
+        ],
+      },
+      Node: {
+        type: 'object',
+        description: 'Anything with an ID can be a node',
+        properties: {
+          id: {
+            type: 'object',
+            description: 'A unique identifier',
+            properties: {
+              return: { $ref: '#/definitions/String' },
+              arguments: { type: 'object', properties: {}, required: [] },
+            },
+            required: [],
+          },
+        },
+        required: ['id'],
+      },
+    },
+  } as JSONSchema6
+}
