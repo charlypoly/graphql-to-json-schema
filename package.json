@@ -30,7 +30,7 @@
     "graphql": "15.4.0",
     "jest": "26.6.3",
     "nodemon": "2.0.12",
-    "prettier": "2.2.1",
+    "prettier": "2.8.8",
     "standard-version": "9.1.0",
     "ts-jest": "26.4.4",
     "tslint": "5.20.1",
