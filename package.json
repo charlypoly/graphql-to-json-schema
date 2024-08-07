@@ -29,7 +29,7 @@
     "ajv": "7.0.3",
     "graphql": "15.4.0",
     "jest": "26.6.3",
-    "nodemon": "2.0.12",
+    "nodemon": "2.0.22",
     "prettier": "2.2.1",
     "commit-and-tag-version": "9.5.0",
     "ts-jest": "26.4.4",
