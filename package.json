@@ -23,7 +23,7 @@
   "devDependencies": {
     "@types/ajv": "1.0.0",
     "@types/jest": "26.0.20",
-    "@types/json-schema": "7.0.6",
+    "@types/json-schema": "7.0.15",
     "@types/lodash": "4.14.168",
     "@types/node": "14.18.63",
     "ajv": "7.2.4",
